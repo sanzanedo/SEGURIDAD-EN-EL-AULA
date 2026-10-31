@@ -1,0 +1,1079 @@
+<title>IA segura en el aula</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@500;700&family=IBM+Plex+Mono:wght@400;500&family=Source+Serif+4:ital,wght@0,400;0,600;1,400&display=swap">
+<style>
+/* Layout: cabecera granate a sangre, secciones numeradas, calendario con línea vertical, semáforos con símbolo y fichas filtrables */
+:root {
+  --bg: #FAF5F3;
+  --surface: #FFFFFF;
+  --ink: #2B1620;
+  --muted: #6E5760;
+  --line: #E8D8DA;
+  --accent: #7B1E3F;
+  --accent-deep: #4E0F27;
+  --accent-soft: #F6E6EA;
+  --on-accent: #FFF4F6;
+  --ok: #24704A;
+  --ok-soft: #E1F1E8;
+  --warn: #8F5200;
+  --warn-soft: #FBEBD2;
+  --stop: #C0262D;
+  --stop-soft: #FBE3E1;
+  --shadow: 0 1px 2px rgba(78,15,39,.06), 0 6px 18px rgba(78,15,39,.07);
+  --font-display: "Bricolage Grotesque", "Helvetica Neue", Arial, sans-serif;
+  --font-body: "Source Serif 4", Georgia, "Times New Roman", serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #1A0D13; --surface: #271319; --ink: #F4E8EB; --muted: #C2A6AF; --line: #4A2A35;
+    --accent: #E7A0B5; --accent-deep: #5A1230; --accent-soft: #3B1A26; --on-accent: #FFF4F6;
+    --ok: #6CCB98; --ok-soft: #14291F; --warn: #E9AA55; --warn-soft: #33250F; --stop: #FF8F8A; --stop-soft: #3A1B1B;
+    --shadow: 0 1px 2px rgba(0,0,0,.4), 0 6px 18px rgba(0,0,0,.35);
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #1A0D13; --surface: #271319; --ink: #F4E8EB; --muted: #C2A6AF; --line: #4A2A35;
+  --accent: #E7A0B5; --accent-deep: #5A1230; --accent-soft: #3B1A26; --on-accent: #FFF4F6;
+  --ok: #6CCB98; --ok-soft: #14291F; --warn: #E9AA55; --warn-soft: #33250F; --stop: #FF8F8A; --stop-soft: #3A1B1B;
+  --shadow: 0 1px 2px rgba(0,0,0,.4), 0 6px 18px rgba(0,0,0,.35);
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  background: var(--bg); color: var(--ink);
+  font-family: var(--font-body); font-size: 17px; line-height: 1.62;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 20px 64px;
+  counter-reset: sec;
+}
+.wrap { max-width: 940px; margin: 0 auto; display: flex; flex-direction: column; gap: 64px; }
+h1, h2, h3 { font-family: var(--font-display); line-height: 1.15; text-wrap: balance; margin: 0; }
+h1 { font-size: clamp(2.2rem, 6vw, 3.5rem); font-weight: 700; letter-spacing: -0.02em; }
+h2 { font-size: clamp(1.5rem, 3.4vw, 2rem); font-weight: 700; letter-spacing: -0.01em; }
+h3 { font-size: 1.08rem; font-weight: 700; }
+p { margin: 0; max-width: 68ch; }
+a { color: var(--accent); text-underline-offset: 3px; }
+a:focus-visible, summary:focus-visible, button:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; border-radius: 4px; }
+.eyebrow { font-family: var(--font-mono); font-size: 0.78rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
+
+/* Cabecera */
+header {
+  position: relative; overflow: hidden; display: flex; flex-direction: column; gap: 20px;
+  background: linear-gradient(135deg, #4E0F27 0%, #7B1E3F 55%, #A02C55 100%);
+  color: #FFF4F6; border-radius: 20px; padding: clamp(24px, 5vw, 48px);
+  box-shadow: var(--shadow);
+}
+header::before, header::after { content: ""; position: absolute; border-radius: 50%; border: 1px solid rgba(255,244,246,.18); pointer-events: none; }
+header::before { width: 340px; height: 340px; right: -90px; top: -120px; }
+header::after { width: 220px; height: 220px; right: 60px; top: 30px; }
+header > * { position: relative; }
+header .eyebrow { color: #F2C6D2; }
+.lede { font-size: 1.15rem; color: #FBE3EA; max-width: 60ch; }
+.stamp { display: flex; flex-wrap: wrap; gap: 8px 10px; font-family: var(--font-mono); font-size: 0.78rem; }
+.stamp span { background: rgba(255,244,246,.14); border: 1px solid rgba(255,244,246,.25); padding: 3px 11px; border-radius: 999px; color: #FFF4F6; }
+nav.toc { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 4px; }
+nav.toc a { font-family: var(--font-display); font-weight: 500; font-size: 0.9rem; text-decoration: none; color: #FFF4F6; border: 1px solid rgba(255,244,246,.35); background: rgba(255,244,246,.08); padding: 6px 13px; border-radius: 999px; transition: background .15s, color .15s; }
+nav.toc a:hover { background: #FFF4F6; color: #4E0F27; }
+
+section { display: flex; flex-direction: column; gap: 22px; scroll-margin-top: 16px; }
+.sec-head { display: flex; flex-direction: column; gap: 8px; }
+.sec-head h2::before {
+  counter-increment: sec; content: counter(sec, decimal-leading-zero);
+  display: block; font-family: var(--font-mono); font-weight: 500; font-size: 0.82rem; letter-spacing: 0.1em;
+  color: var(--accent); margin-bottom: 8px;
+}
+.sec-head h2::after { content: ""; display: block; width: 48px; height: 4px; border-radius: 4px; background: var(--accent); margin-top: 12px; }
+.sec-head > p { color: var(--muted); }
+
+.summary { display: grid; gap: 14px; }
+.summary p { max-width: 74ch; }
+.callout { border-left: 5px solid var(--accent); background: var(--accent-soft); padding: 16px 20px; border-radius: 0 12px 12px 0; max-width: 74ch; }
+
+/* Calendario */
+.timeline { list-style: none; margin: 0; padding: 0 0 0 4px; display: flex; flex-direction: column; position: relative; }
+.timeline::before { content: ""; position: absolute; left: 150px; top: 8px; bottom: 8px; width: 2px; background: var(--line); }
+.tl-item { display: grid; grid-template-columns: 138px 1fr; gap: 6px 36px; padding: 14px 0; position: relative; }
+.tl-item::before { content: ""; position: absolute; left: 146px; top: 22px; width: 10px; height: 10px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 0 4px var(--bg); }
+.tl-date { font-family: var(--font-mono); font-size: 0.86rem; color: var(--accent); font-weight: 500; padding-top: 3px; }
+.tl-body { display: flex; flex-direction: column; gap: 6px; min-width: 0; background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 14px 16px; }
+.tl-title { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; }
+.pill { font-family: var(--font-mono); font-size: 0.72rem; letter-spacing: 0.04em; text-transform: uppercase; padding: 2px 9px; border-radius: 999px; border: 1px solid currentColor; white-space: nowrap; }
+.pill.ok { color: var(--ok); background: var(--ok-soft); }
+.pill.warn { color: var(--warn); background: var(--warn-soft); }
+.pill.info { color: var(--accent); background: var(--accent-soft); }
+.tl-body p { font-size: 0.98rem; }
+
+/* Marcos */
+.frames { display: flex; flex-direction: column; gap: 10px; }
+details.frame { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; box-shadow: var(--shadow); overflow: hidden; }
+details.frame[open] { border-color: var(--accent); }
+details.frame > summary { list-style: none; cursor: pointer; padding: 16px 20px; display: flex; justify-content: space-between; align-items: center; gap: 16px; font-family: var(--font-display); font-weight: 700; font-size: 1.1rem; }
+details.frame > summary::-webkit-details-marker { display: none; }
+details.frame > summary .tag { font-family: var(--font-mono); font-weight: 400; font-size: 0.76rem; color: var(--muted); text-align: right; margin-left: auto; }
+details.frame > summary::after { content: "+"; font-family: var(--font-mono); color: var(--on-accent); background: var(--accent); width: 26px; height: 26px; border-radius: 50%; display: grid; place-items: center; font-size: 1.1rem; line-height: 1; flex: none; }
+:root[data-theme="dark"] details.frame > summary::after { color: #2B1620; }
+details.frame[open] > summary::after { content: "\2212"; }
+.frame-body { padding: 2px 20px 22px; display: flex; flex-direction: column; gap: 12px; }
+.frame-body p { font-size: 1rem; }
+
+/* Semáforos */
+.lights { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+.light { background: var(--surface); border: 1px solid var(--line); border-radius: 16px; padding: 0 20px 20px; display: flex; flex-direction: column; gap: 12px; min-width: 0; box-shadow: var(--shadow); overflow: hidden; }
+.light::before { content: ""; display: block; height: 8px; margin: 0 -20px 6px; background: var(--c); }
+.light.green { --c: var(--ok); --cs: var(--ok-soft); }
+.light.amber { --c: var(--warn); --cs: var(--warn-soft); }
+.light.red { --c: var(--stop); --cs: var(--stop-soft); }
+.light h3 { display: grid; grid-template-columns: 40px 1fr; column-gap: 12px; align-items: center; color: var(--c); font-size: 1.2rem; }
+.light h3::before { content: "\2713"; grid-row: span 2; width: 40px; height: 40px; border-radius: 50%; background: var(--cs); border: 2px solid var(--c); display: grid; place-items: center; font-size: 1.15rem; line-height: 1; }
+.light.amber h3::before { content: "!"; font-family: var(--font-display); font-weight: 700; }
+.light.red h3::before { content: "\2715"; }
+.light h3 span { font-family: var(--font-mono); font-weight: 400; font-size: 0.76rem; color: var(--muted); }
+.light ul { margin: 0; padding-left: 1.1em; display: flex; flex-direction: column; gap: 9px; font-size: 0.96rem; }
+.light li::marker { color: var(--c); }
+
+/* Fichas */
+.chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.chip { font-family: var(--font-display); font-weight: 500; font-size: 0.9rem; border: 1px solid var(--line); background: var(--surface); color: var(--ink); padding: 7px 15px; border-radius: 999px; cursor: pointer; transition: border-color .15s; }
+.chip:hover { border-color: var(--accent); }
+.chip[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: var(--on-accent); }
+:root[data-theme="dark"] .chip[aria-pressed="true"] { color: #2B1620; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .chip[aria-pressed="true"], :root:not([data-theme="light"]) details.frame > summary::after { color: #2B1620; } }
+.cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 390px), 1fr)); gap: 16px; }
+.card { background: var(--surface); border: 1px solid var(--line); border-top: 4px solid var(--accent); border-radius: 14px; padding: 18px 20px; display: flex; flex-direction: column; gap: 10px; min-width: 0; box-shadow: var(--shadow); }
+.card[hidden] { display: none; }
+.card p { font-size: 0.97rem; }
+.card .badges { display: flex; flex-wrap: wrap; gap: 6px; }
+.card .how { border-top: 1px dashed var(--line); padding-top: 10px; color: var(--muted); font-size: 0.93rem; }
+.card .how b { color: var(--accent); font-family: var(--font-display); font-weight: 700; }
+.ev { font-family: var(--font-mono); font-size: 0.72rem; letter-spacing: 0.03em; padding: 2px 9px; border-radius: 6px; }
+.ev.exp { background: var(--ok-soft); color: var(--ok); }
+.ev.mta { background: var(--accent-soft); color: var(--accent); }
+.ev.prac { background: var(--warn-soft); color: var(--warn); }
+.skill { font-family: var(--font-mono); font-size: 0.72rem; color: var(--muted); border: 1px solid var(--line); padding: 2px 8px; border-radius: 6px; }
+
+.tablewrap { overflow-x: auto; border: 1px solid var(--line); border-radius: 14px; background: var(--surface); box-shadow: var(--shadow); }
+table { border-collapse: collapse; width: 100%; min-width: 720px; font-size: 0.93rem; }
+th, td { text-align: left; vertical-align: top; padding: 12px 14px; border-bottom: 1px solid var(--line); }
+thead th { background: var(--accent-soft); color: var(--accent); }
+th { font-family: var(--font-mono); font-weight: 500; font-size: 0.74rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); }
+tr:last-child td { border-bottom: 0; }
+.reading { display: inline-block; font-family: var(--font-mono); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--accent); background: var(--accent-soft); padding: 1px 7px; border-radius: 5px; margin-right: 6px; }
+
+.ages { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr)); gap: 14px; }
+.age-col { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 18px; display: flex; flex-direction: column; gap: 10px; min-width: 0; box-shadow: var(--shadow); }
+.age-num { font-family: var(--font-display); font-weight: 700; font-size: 2.6rem; line-height: 1; color: var(--accent); font-variant-numeric: tabular-nums; }
+.age-num small { font-family: var(--font-mono); font-weight: 400; font-size: 0.78rem; color: var(--muted); margin-left: 6px; }
+.age-col ul { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 4px; font-size: 0.95rem; }
+.age-col li.flag { color: var(--warn); }
+.notes { display: grid; gap: 8px; font-size: 0.95rem; max-width: 74ch; }
+.unknown { display: grid; gap: 12px; }
+.unknown div { border: 1px solid var(--line); border-left: 4px solid var(--warn); background: var(--surface); border-radius: 12px; padding: 14px 18px; display: grid; gap: 4px; }
+.unknown h3 { color: var(--warn); }
+
+/* Datos y anonimización */
+.dataflow { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+.dataflow .light ul { gap: 7px; }
+.steps { counter-reset: st; list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr)); gap: 12px; }
+.steps li { counter-increment: st; background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 14px 16px 14px 56px; position: relative; font-size: 0.96rem; box-shadow: var(--shadow); }
+.steps li::before { content: counter(st); position: absolute; left: 14px; top: 12px; width: 30px; height: 30px; border-radius: 50%; background: var(--accent); color: var(--on-accent); display: grid; place-items: center; font-family: var(--font-display); font-weight: 700; }
+:root[data-theme="dark"] .steps li::before { color: #2B1620; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .steps li::before { color: #2B1620; } }
+
+.sources h3 { margin-top: 8px; color: var(--accent); }
+.sources ul { margin: 6px 0 0; padding-left: 1.1em; display: flex; flex-direction: column; gap: 6px; font-size: 0.92rem; }
+.sources li { overflow-wrap: anywhere; }
+footer { font-size: 0.88rem; color: var(--muted); max-width: 68ch; border-top: 1px solid var(--line); padding-top: 18px; }
+
+@media (max-width: 760px) {
+  .lights, .dataflow { grid-template-columns: 1fr; }
+  .timeline::before { left: 9px; }
+  .tl-item { grid-template-columns: 1fr; gap: 4px; padding-left: 30px; }
+  .tl-item::before { left: 5px; top: 20px; }
+  body { font-size: 16px; }
+}
+@media (prefers-reduced-motion: reduce) { * { scroll-behavior: auto !important; transition: none !important; } }
+
+/* Simulador y lista de comprobación */
+.sim { background: var(--surface); border: 1px solid var(--line); border-radius: 18px; box-shadow: var(--shadow); padding: clamp(16px, 3vw, 28px); display: flex; flex-direction: column; gap: 22px; }
+.q { border: 0; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+.q legend { padding: 0; font-family: var(--font-display); font-weight: 700; font-size: 1.05rem; display: flex; gap: 10px; align-items: center; margin-bottom: 4px; }
+.q legend b { background: var(--accent); color: var(--on-accent); width: 26px; height: 26px; border-radius: 50%; display: inline-grid; place-items: center; font-size: 0.85rem; flex: none; }
+:root[data-theme="dark"] .q legend b { color: #2B1620; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .q legend b { color: #2B1620; } }
+.opts { display: flex; flex-wrap: wrap; gap: 8px; }
+.opt { position: relative; }
+.opt input { position: absolute; opacity: 0; inset: 0; width: 100%; height: 100%; margin: 0; cursor: pointer; }
+.opt span { display: block; font-family: var(--font-display); font-weight: 500; font-size: 0.93rem; line-height: 1.3; border: 1.5px solid var(--line); background: var(--bg); padding: 9px 15px; border-radius: 12px; transition: border-color .15s, background .15s; }
+.opt:hover span { border-color: var(--accent); }
+.opt input:checked + span { background: var(--accent); border-color: var(--accent); color: var(--on-accent); }
+:root[data-theme="dark"] .opt input:checked + span { color: #2B1620; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .opt input:checked + span { color: #2B1620; } }
+.opt input:focus-visible + span { outline: 3px solid var(--accent); outline-offset: 2px; }
+.sim-actions { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+.btn { font-family: var(--font-display); font-weight: 500; font-size: 0.92rem; border: 1.5px solid var(--accent); background: transparent; color: var(--accent); padding: 8px 16px; border-radius: 999px; cursor: pointer; }
+.btn:hover { background: var(--accent-soft); }
+.hint { font-family: var(--font-mono); font-size: 0.78rem; color: var(--muted); }
+
+.verdict { --c: var(--muted); --cs: var(--accent-soft); display: grid; grid-template-columns: 96px 1fr; gap: 22px; border-radius: 16px; padding: 22px; background: var(--cs); border: 2px solid var(--c); }
+.verdict[hidden] { display: none; }
+.verdict.l0 { --c: var(--ok); --cs: var(--ok-soft); }
+.verdict.l1 { --c: var(--warn); --cs: var(--warn-soft); }
+.verdict.l2 { --c: var(--stop); --cs: var(--stop-soft); }
+.lamps { display: flex; flex-direction: column; gap: 8px; background: #2A1118; border-radius: 40px; padding: 12px; align-self: start; width: 64px; justify-self: center; }
+.lamp { width: 40px; height: 40px; border-radius: 50%; opacity: .22; margin: 0 auto; }
+.lamp.r { background: #E0383F; } .lamp.a { background: #F0A02E; } .lamp.g { background: #3DBB7C; }
+.verdict.l0 .lamp.g, .verdict.l1 .lamp.a, .verdict.l2 .lamp.r { opacity: 1; box-shadow: 0 0 18px 4px currentColor; }
+.lamp.g { color: rgba(61,187,124,.7); } .lamp.a { color: rgba(240,160,46,.7); } .lamp.r { color: rgba(224,56,63,.7); }
+.v-body { display: flex; flex-direction: column; gap: 12px; min-width: 0; }
+.v-body h3 { font-size: 1.35rem; color: var(--c); }
+.v-body h4 { font-family: var(--font-mono); font-size: 0.76rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); margin: 0 0 4px; font-weight: 500; }
+.v-body ul { margin: 0; padding-left: 1.1em; display: flex; flex-direction: column; gap: 6px; font-size: 0.96rem; }
+.v-body li::marker { color: var(--c); }
+.v-note { font-size: 0.88rem; color: var(--muted); }
+
+.check { background: var(--surface); border: 1px solid var(--line); border-radius: 18px; box-shadow: var(--shadow); padding: clamp(16px, 3vw, 28px); display: flex; flex-direction: column; gap: 20px; }
+.progress { display: flex; flex-direction: column; gap: 8px; }
+.bar { height: 10px; border-radius: 99px; background: var(--accent-soft); overflow: hidden; }
+.bar i { display: block; height: 100%; width: 0; background: linear-gradient(90deg, var(--accent), #B03A62); border-radius: 99px; transition: width .25s; }
+.progress-top { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; flex-wrap: wrap; font-family: var(--font-display); font-weight: 700; }
+.progress-top span { font-family: var(--font-mono); font-weight: 400; font-size: 0.82rem; color: var(--muted); }
+.cl-group { display: flex; flex-direction: column; gap: 6px; }
+.cl-group h3 { color: var(--accent); font-size: 1rem; padding-bottom: 6px; border-bottom: 1px solid var(--line); }
+.cl-item { display: grid; grid-template-columns: 26px 1fr; gap: 12px; align-items: start; padding: 8px 6px; border-radius: 10px; cursor: pointer; font-size: 0.97rem; }
+.cl-item:hover { background: var(--accent-soft); }
+.cl-item input { appearance: none; -webkit-appearance: none; width: 22px; height: 22px; margin: 2px 0 0; border: 2px solid var(--accent); border-radius: 6px; display: grid; place-items: center; cursor: pointer; background: var(--bg); }
+.cl-item input:checked { background: var(--accent); }
+.cl-item input:checked::after { content: "\2713"; color: var(--on-accent); font-size: 0.85rem; line-height: 1; font-weight: 700; }
+:root[data-theme="dark"] .cl-item input:checked::after { color: #2B1620; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .cl-item input:checked::after { color: #2B1620; } }
+.cl-item input:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+.cl-item input:checked + span { color: var(--muted); text-decoration: line-through; text-decoration-color: var(--line); }
+.done-msg { background: var(--ok-soft); color: var(--ok); border: 1px solid var(--ok); border-radius: 12px; padding: 12px 16px; font-family: var(--font-display); font-weight: 500; }
+.done-msg[hidden] { display: none; }
+@media (max-width: 760px) { .verdict { grid-template-columns: 1fr; } .lamps { flex-direction: row; width: auto; border-radius: 40px; padding: 10px 14px; justify-self: start; } }
+
+/* Normativa citada */
+.norm-group { display: flex; flex-direction: column; gap: 12px; }
+.norm-group > h3 { color: var(--accent); font-size: 1.1rem; display: flex; align-items: center; gap: 10px; }
+.norm-group > h3::after { content: ""; flex: 1; height: 1px; background: var(--line); }
+.norms { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 410px), 1fr)); gap: 14px; }
+.norm { background: var(--surface); border: 1px solid var(--line); border-left: 5px solid var(--accent); border-radius: 14px; padding: 16px 18px; display: flex; flex-direction: column; gap: 8px; min-width: 0; box-shadow: var(--shadow); }
+.norm.bind { border-left-color: var(--ok); }
+.norm.treaty { border-left-color: var(--warn); }
+.norm .vj { align-self: flex-start; font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.05em; text-transform: uppercase; padding: 2px 9px; border-radius: 6px; background: var(--accent-soft); color: var(--accent); }
+.norm.bind .vj { background: var(--ok-soft); color: var(--ok); }
+.norm.treaty .vj { background: var(--warn-soft); color: var(--warn); }
+.norm h4 { font-family: var(--font-display); font-size: 1.04rem; line-height: 1.25; margin: 0; }
+.norm .cite { font-family: var(--font-mono); font-size: 0.78rem; color: var(--muted); overflow-wrap: anywhere; }
+.norm p { font-size: 0.94rem; }
+.norm .lnk { font-family: var(--font-display); font-weight: 500; font-size: 0.9rem; }
+
+/* Pestañas por país */
+.tablist { display: flex; flex-wrap: wrap; gap: 8px; border-bottom: 2px solid var(--line); padding-bottom: 0; }
+.tab { font-family: var(--font-display); font-weight: 700; font-size: 1rem; border: 0; background: transparent; color: var(--muted); padding: 10px 20px; border-radius: 12px 12px 0 0; cursor: pointer; margin-bottom: -2px; border-bottom: 4px solid transparent; }
+.tab:hover { color: var(--accent); background: var(--accent-soft); }
+.tab[aria-selected="true"] { color: var(--accent); border-bottom-color: var(--accent); background: var(--accent-soft); }
+.tab:focus-visible { outline: 3px solid var(--accent); outline-offset: -3px; }
+.tabpanel { display: flex; flex-direction: column; gap: 22px; padding-top: 6px; }
+.tabpanel[hidden] { display: none; }
+.agebadge { display: flex; align-items: center; gap: 18px; background: var(--surface); border: 1px solid var(--line); border-radius: 16px; padding: 14px 20px; box-shadow: var(--shadow); }
+.agebadge p { font-size: 0.95rem; color: var(--muted); }
+
+.byline { display: flex; align-items: center; gap: 14px; font-family: var(--font-display); font-weight: 500; font-size: 1.05rem; letter-spacing: 0.01em; color: #FFF4F6; max-width: none; }
+.byline::before { content: ""; width: 36px; height: 2px; background: #F2C6D2; border-radius: 2px; }
+</style>
+
+<div class="wrap">
+
+<header>
+  <div class="eyebrow">Marco europeo y usos didácticos</div>
+  <h1>IA segura en el aula</h1>
+  <p class="byline">Marta Sanz Manzanedo</p>
+  <p class="lede">Qué regulan hoy la Unión Europea y los organismos internacionales sobre el uso de IA en educación, y qué alternativas de uso didáctico tienen respaldo.</p>
+  <div class="stamp"><span>Revisado el 31 de octubre de 2026</span><span>Ámbito: Unión Europea</span></div>
+  <nav class="toc" aria-label="Secciones">
+    <a href="#resumen">Resumen</a>
+    <a href="#calendario">Calendario</a>
+    <a href="#marcos">Qué dice cada marco</a>
+    <a href="#edades">Edad por país</a>
+    <a href="#semaforo">Semáforo del aula</a>
+    <a href="#datos">Datos y anonimizar</a>
+    <a href="#simulador">Semáforo interactivo</a>
+    <a href="#checklist">Lista del docente</a>
+    <a href="#usos">Alternativas de uso</a>
+    <a href="#evidencia">Evidencia</a>
+    <a href="#normativa">Normativa citada</a>
+    <a href="#paises">Por países</a>
+    <a href="#fuentes">Fuentes</a>
+  </nav>
+</header>
+
+<section id="resumen">
+  <div class="sec-head"><div class="eyebrow">Lo esencial</div><h2>Dos capas de reglas y una fecha que cambió</h2></div>
+  <div class="summary">
+    <p>El marco común europeo descansa en dos pilares: el Reglamento de IA, que prohíbe ciertas prácticas, clasifica los usos educativos de riesgo y exige transparencia, y el RGPD, que regula los datos personales del alumnado. Sobre ellos, cada Estado miembro y cada centro añaden sus propias reglas, de modo que la segunda capa cambia según el país. En octubre de 2026 el cambio más importante es que las obligaciones de alto riesgo para sistemas de IA educativos se aplazaron al 2 de diciembre de 2027. Siguen aplicándose desde febrero de 2025 la prohibición de inferir emociones en centros educativos y el deber de alfabetización en IA, que desde julio de 2026 se redacta como obligación de apoyar esa formación y no de garantizarla.</p>
+    <p>Del marco europeo se desprenden tres líneas rojas para el aula: no inferir emociones del alumnado, no delegar en la IA la nota ni decisiones sobre su recorrido, y tratar los datos personales con la mínima exposición posible. Lo demás depende de la política de cada centro y de la normativa nacional, así que conviene comprobar ambas antes de aplicar cualquier idea de esta página.</p>
+    <p>Sobre los usos didácticos, la evidencia disponible apunta a que el diseño de la herramienta pesa más que la herramienta. Un asistente sin límites mejoró el rendimiento durante la práctica y empeoró el examen posterior sin IA. Uno configurado para guiar y no responder neutralizó ese daño.</p>
+  </div>
+</section>
+
+<section id="calendario">
+  <div class="sec-head"><div class="eyebrow">Orden cronológico</div><h2>Calendario de lo que ya rige y lo que viene</h2></div>
+  <ol class="timeline">
+    <li class="tl-item"><div class="tl-date">25 oct 2022</div><div class="tl-body"><div class="tl-title"><h3>Directrices éticas de la Comisión para docentes</h3><span class="pill info">Referencia</span></div><p>Orientaciones para profesorado de primaria y secundaria sobre IA y datos. Anteceden a la popularización de la IA generativa.</p></div></li>
+    <li class="tl-item"><div class="tl-date">2024</div><div class="tl-body"><div class="tl-title"><h3>Marcos de competencias en IA de la UNESCO</h3><span class="pill info">Referencia</span></div><p>Marcos para alumnado y profesorado presentados en la Digital Learning Week de 2024. No son vinculantes.</p></div></li>
+    <li class="tl-item"><div class="tl-date">2 feb 2025</div><div class="tl-body"><div class="tl-title"><h3>Prácticas prohibidas y alfabetización en IA</h3><span class="pill ok">En vigor</span></div><p>Empiezan a aplicarse el artículo 5 del Reglamento de IA, que incluye la prohibición de inferir emociones en centros educativos, y el artículo 4 sobre alfabetización.</p></div></li>
+    <li class="tl-item"><div class="tl-date">2 ago 2025</div><div class="tl-body"><div class="tl-title"><h3>Obligaciones para modelos de IA de propósito general</h3><span class="pill ok">En vigor</span></div><p>Afectan a quienes desarrollan los modelos que hay detrás de los asistentes de uso común.</p></div></li>
+    <li class="tl-item"><div class="tl-date">19 nov 2025</div><div class="tl-body"><div class="tl-title"><h3>La Comisión propone el Digital Omnibus sobre IA</h3><span class="pill info">Cumplido</span></div><p>Propuesta de aplazar el alto riesgo y de simplificar parte del Reglamento.</p></div></li>
+    <li class="tl-item"><div class="tl-date">27 jul 2026</div><div class="tl-body"><div class="tl-title"><h3>Digital Omnibus, Reglamento (UE) 2026/1744</h3><span class="pill ok">En vigor</span></div><p>Aplaza las obligaciones de alto riesgo del Anexo III, que incluye la educación, y reformula el artículo 4 sobre alfabetización.</p></div></li>
+    <li class="tl-item"><div class="tl-date">2 ago 2026</div><div class="tl-body"><div class="tl-title"><h3>Transparencia del artículo 50</h3><span class="pill ok">En vigor</span></div><p>Los sistemas de IA que interactúan con personas, como los chatbots, deben identificarse como tales. El Omnibus no tocó esta fecha.</p></div></li>
+    <li class="tl-item"><div class="tl-date">2 dic 2026</div><div class="tl-body"><div class="tl-title"><h3>Marcado de contenido generado, sistemas ya comercializados</h3><span class="pill info">Próximo</span></div><p>Plazo ampliado para el marcado legible por máquina en sistemas generativos que ya estaban en el mercado antes del 2 de agosto de 2026.</p></div></li>
+    <li class="tl-item"><div class="tl-date">2 dic 2027</div><div class="tl-body"><div class="tl-title"><h3>Alto riesgo en educación (Anexo III)</h3><span class="pill warn">Aplazado</span></div><p>Admisión, evaluación de resultados de aprendizaje, determinación del nivel educativo y vigilancia de exámenes pasan a esta fecha, antes fijada en agosto de 2026.</p></div></li>
+  </ol>
+</section>
+
+<section id="marcos">
+  <div class="sec-head"><div class="eyebrow">Capa por capa</div><h2>Qué dice cada marco</h2></div>
+  <div class="frames">
+
+    <details class="frame" open>
+      <summary>Reglamento de IA y Omnibus <span class="tag">Reg. (UE) 2024/1689 y 2026/1744</span></summary>
+      <div class="frame-body">
+        <p><strong>Prohibido.</strong> El artículo 5 veta los sistemas que infieren emociones de las personas en centros educativos. El texto prevé excepciones acotadas, de tipo médico o de seguridad, que conviene leer en el propio artículo antes de descartar cualquier caso.</p>
+        <p><strong>Alto riesgo.</strong> El Anexo III incluye los sistemas usados para decidir el acceso o la admisión, evaluar resultados de aprendizaje, determinar el nivel educativo adecuado para una persona y detectar conductas prohibidas durante los exámenes. Quien los use como responsable del despliegue deberá informar a las personas afectadas y asignar la supervisión humana a personas con competencia, formación y autoridad. Esas obligaciones se aplican desde el 2 de diciembre de 2027.</p>
+        <p><strong>Transparencia.</strong> Desde el 2 de agosto de 2026, los sistemas que interactúan con personas deben dejar claro que son IA, y los contenidos sintéticos deben poder identificarse como tales.</p>
+        <p><strong>Alfabetización.</strong> El artículo 4 sigue vigente, pero tras el Omnibus obliga a tomar medidas para apoyar la alfabetización en IA del personal, sin garantizar un nivel concreto.</p>
+      </div>
+    </details>
+
+    <details class="frame">
+      <summary>RGPD y datos del alumnado <span class="tag">Reg. (UE) 2016/679</span></summary>
+      <div class="frame-body">
+        <p>El artículo 8 fija en 16 años la edad a partir de la cual un menor puede dar por sí mismo su consentimiento al tratamiento de datos en servicios de la sociedad de la información. Por debajo, hace falta el consentimiento de quien ejerce la patria potestad. Los Estados miembros pueden rebajar esa edad por ley, sin bajar de 13, de modo que el umbral real depende del país.</p>
+        <p>Antes de pedir al alumnado que se registre en una herramienta de IA, conviene comprobar el umbral de edad del país y la política del centro.</p>
+        <p>Los principios generales del RGPD, como la minimización de datos y la limitación de la finalidad, se aplican igual a cualquier herramienta de IA. En la práctica, cuantos menos datos personales entren en un asistente, menos obligaciones se activan.</p>
+      </div>
+    </details>
+
+    <details class="frame">
+      <summary>Directrices éticas de la Comisión Europea <span class="tag">Octubre de 2022</span></summary>
+      <div class="frame-body">
+        <p>Se publicaron el 25 de octubre de 2022, como parte del Plan de Acción de Educación Digital 2021 a 2027, tras el trabajo de un grupo de expertos entre julio de 2021 y junio de 2022. Van dirigidas a docentes de primaria y secundaria, incluso con poca experiencia digital, y también ofrecen consejos a equipos directivos.</p>
+        <p>Cubren cinco bloques: desmontar mitos sobre la IA, consideraciones éticas, integración práctica en el centro, competencias docentes emergentes y participación de la comunidad escolar. Son anteriores a la generalización de la IA generativa.</p>
+      </div>
+    </details>
+
+    <details class="frame">
+      <summary>UNESCO: marcos de competencias <span class="tag">2023 y 2024</span></summary>
+      <div class="frame-body">
+        <p>La guía de 2023 sobre IA generativa en educación y los marcos de competencias de 2024 no son vinculantes, pero ordenan la formación. El marco para el alumnado define 12 competencias en cuatro dimensiones: mentalidad centrada en las personas, ética de la IA, técnicas y aplicaciones, y diseño de sistemas. El del profesorado define 15 competencias en cinco dimensiones, entre ellas la pedagogía de la IA y el desarrollo profesional. Ambos insisten en que la IA complementa al docente y no lo reemplaza.</p>
+      </div>
+    </details>
+
+    <details class="frame">
+      <summary>Cuenta educativa y cuenta personal <span class="tag">Declaraciones de Google</span></summary>
+      <div class="frame-body">
+        <p>Google afirma que, con una cuenta de Workspace for Education, los chats de Gemini y NotebookLM no los revisan personas ni se usan para mejorar modelos generativos. Ambos servicios quedan bajo las condiciones de Workspace for Education, sin anuncios, y la información del alumnado no se usa para entrenar sus modelos ni para perfilar publicidad. Gemini for Education y NotebookLM figuran como disponibles para alumnado de todas las edades, con salvaguardas específicas para menores de 18 años. Otras funciones, como Workspace con Gemini o las funciones generativas de Chrome, se limitan a docentes y a estudiantes de 18 años o más.</p>
+        <p>Son declaraciones del proveedor, no una certificación de cumplimiento: el centro sigue siendo responsable de evaluar la herramienta. Para datos del alumnado, conviene usar una cuenta administrada por el centro y no una cuenta personal.</p>
+        <p><strong>En Classroom.</strong> Según Google, desde agosto de 2026 la pestaña de Gemini en Classroom está disponible para alumnado de todas las edades, siempre que el administrador haya dado acceso a Gemini en Classroom, a Gemini y a NotebookLM. Está activada por defecto, y un administrador puede desactivarla solo para menores de 18 años si los agrupa en una unidad organizativa propia. El mínimo de 13 años aparece en el anuncio de NotebookLM de agosto de 2025, pero para cuentas personales: 13 años o la edad mínima del país si es mayor. Para Workspace for Education, ese mismo anuncio presenta NotebookLM como servicio central para usuarios de todas las edades. El anuncio añade que los chats y las fuentes subidas no los revisan personas ni se usan para entrenar modelos.</p>
+      </div>
+    </details>
+
+    <details class="frame">
+      <summary>Capa nacional y de centro <span class="tag">Varía según el país</span></summary>
+      <div class="frame-body">
+        <p>Cada Estado miembro designa sus autoridades de supervisión del Reglamento de IA y de protección de datos, fija la edad de consentimiento digital dentro del rango de 13 a 16 años y puede publicar orientaciones educativas propias. Los centros, a su vez, suelen aprobar políticas de uso de IA con listas de herramientas permitidas y condiciones para el alumnado.</p>
+        <p>Antes de aplicar cualquier actividad de esta página, conviene comprobar tres cosas: el umbral de edad del país, las orientaciones del ministerio de educación y la política de IA del centro.</p>
+      </div>
+    </details>
+
+  </div>
+</section>
+
+<section id="edades">
+  <div class="sec-head"><div class="eyebrow">Artículo 8 del RGPD</div><h2>Edad de consentimiento digital por país</h2><p>Edad a partir de la cual una persona menor puede dar por sí misma su consentimiento en servicios en línea. Por debajo, consienten las familias. Datos recopilados de varias páginas de consulta con fecha de septiembre y octubre de 2026.</p></div>
+  <div class="ages">
+    <div class="age-col"><div class="age-num">13<small>años</small></div><ul><li>Bélgica</li><li>Dinamarca</li><li>Estonia</li><li>Finlandia</li><li>Letonia</li><li>Portugal</li><li>Suecia</li></ul></div>
+    <div class="age-col"><div class="age-num">14<small>años</small></div><ul><li>Austria</li><li>Bulgaria</li><li>Chipre</li><li>España</li><li>Italia</li><li>Lituania</li></ul></div>
+    <div class="age-col"><div class="age-num">15<small>años</small></div><ul><li>Chequia</li><li>Francia</li><li>Grecia</li><li>Eslovenia</li></ul></div>
+    <div class="age-col"><div class="age-num">16<small>años</small></div><ul><li>Alemania</li><li>Croacia</li><li>Eslovaquia</li><li>Hungría</li><li>Irlanda</li><li>Luxemburgo</li><li>Países Bajos</li><li>Polonia</li><li>Rumanía</li></ul></div>
+  </div>
+  <div class="notes">
+    <p><strong>España.</strong> La AEPD confirma los 14 años (artículo 7.1 de la LOPDGDD). Está en trámite un proyecto de ley de protección de menores en entornos digitales que, según el Ministerio de Justicia, sube a 16 la edad mínima para registrarse en redes sociales. Detalle en la pestaña de España.</p>
+    <p>Esta edad se aplica cuando el tratamiento se basa en el consentimiento. Conviene confirmar el umbral con la autoridad de protección de datos del país.</p>
+  </div>
+</section>
+
+<section id="semaforo">
+  <div class="sec-head"><div class="eyebrow">Traducción práctica</div><h2>Semáforo de usos en el aula</h2><p>Resumen orientativo de los usos del aula por nivel de restricción, no un texto oficial. La política del centro y la normativa nacional prevalecen.</p></div>
+  <div class="lights">
+    <div class="light green">
+      <h3>Compatible<span>Sin condiciones especiales conocidas</span></h3>
+      <ul>
+        <li>Preparar materiales, rúbricas y borradores de actividades sin datos personales del alumnado.</li>
+        <li>Asistente configurado para preguntar y guiar, con tarea cerrada y tiempo acotado.</li>
+        <li>Actividades de lectura crítica sobre respuestas de IA: contrastar, detectar errores y sesgos.</li>
+        <li>Autocorrección con clave cerrada en formularios o ejercicios. No es IA generativa, pero comprueba cómo la clasifica la política de tu centro.</li>
+      </ul>
+    </div>
+    <div class="light amber">
+      <h3>Con condiciones<span>Requiere decisión previa</span></h3>
+      <ul>
+        <li>Alumnado por debajo de la edad de consentimiento digital de tu país, entre 13 y 16 años: consentimiento de las familias.</li>
+        <li>Subir textos del alumnado a una herramienta: anonimizar, revisar el proveedor, la conservación de los prompts y las transferencias de datos fuera del Espacio Económico Europeo.</li>
+        <li>Retroalimentación de IA sobre borradores: solo formativa, revisada por el docente y sin nota.</li>
+        <li>Agentes autónomos: comprueba si tu centro exige autorización previa.</li>
+        <li>Herramientas de IA para el alumnado: cuenta educativa administrada por el centro, no personal.</li>
+        <li>NotebookLM con cuenta personal del alumnado: según Google, desde los 13 años o la edad mínima del país si es mayor.</li>
+        <li>Artefactos que guardan respuestas del alumnado: backend en una cuenta educativa.</li>
+        <li>Material generado que se muestra al alumnado: indicar siempre que lo es.</li>
+      </ul>
+    </div>
+    <div class="light red">
+      <h3>Evitar<span>Prohibido o de alto riesgo</span></h3>
+      <ul>
+        <li>Inferir emociones o estados de ánimo del alumnado.</li>
+        <li>Vigilancia automática de exámenes (proctoring).</li>
+        <li>Poner la nota final, decidir la promoción u orientar al alumnado con IA.</li>
+        <li>Elaborar perfiles del alumnado o conservar sus prompts.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section id="datos">
+  <div class="sec-head"><div class="eyebrow">Qué puede entrar en la herramienta</div><h2>Datos del alumnado y anonimización</h2><p>Segundo semáforo, centrado en el contenido que se pega o se sube a un asistente de IA. La clasificación en colores es un resumen orientativo.</p></div>
+  <div class="summary">
+    <p><strong>Seudonimizar no es anonimizar.</strong> El RGPD define la seudonimización como tratar los datos de modo que no puedan atribuirse a una persona sin información adicional, y la considera todavía dato personal. Los datos realmente anónimos quedan fuera del Reglamento, pero solo si la persona ya no es identificable por ningún medio razonable. Quitar el nombre de una redacción suele ser, por tanto, seudonimización. Una anécdota familiar, un pueblo, un apodo o el nombre de un compañero pueden identificar al alumno aunque falte su nombre.</p>
+  </div>
+  <div class="dataflow">
+    <div class="light green">
+      <h3>Entra<span>Sin personas identificables</span></h3>
+      <ul>
+        <li>Textos literarios o periodísticos publicados, consignas y materiales propios.</li>
+        <li>Ejemplos de producción inventados o escritos por ti como modelo.</li>
+        <li>Rúbricas, criterios de evaluación y plantillas vacías.</li>
+        <li>Errores típicos del grupo redactados en general, sin citar a nadie.</li>
+      </ul>
+    </div>
+    <div class="light amber">
+      <h3>Entra con cuidado<span>Seudonimizado, herramienta aprobada</span></h3>
+      <ul>
+        <li>Redacciones del alumnado sin nombre, curso ni centro, y con datos personales internos revisados a mano.</li>
+        <li>Transcripciones de práctica oral sin nombres propios.</li>
+        <li>Solo en una cuenta educativa del centro y con la herramienta admitida por su política.</li>
+        <li>Hazlo tú antes de subir: pedir a la IA que anonimice obliga a enviarle el texto original.</li>
+      </ul>
+    </div>
+    <div class="light red">
+      <h3>No entra<span>Datos identificables o sensibles</span></h3>
+      <ul>
+        <li>Nombre, correo, identificador, fotos, vídeo o voz del alumnado.</li>
+        <li>Notas, boletines, expedientes e informes de evaluación.</li>
+        <li>Datos de salud, necesidades educativas especiales o situación familiar. El RGPD protege de forma reforzada las categorías especiales, como los datos de salud.</li>
+        <li>Cualquier dato en una cuenta personal o en una herramienta no aprobada por el centro.</li>
+      </ul>
+    </div>
+  </div>
+  <div class="sec-head"><h3>Antes de subir un texto del alumnado</h3></div>
+  <ol class="steps">
+    <li>Confirma que tu centro admite esa herramienta y que usas una cuenta educativa.</li>
+    <li>Quita nombres, curso, centro y datos de contacto, y relee el texto buscando detalles que identifiquen.</li>
+    <li>Comprueba si el alumnado está por debajo de la edad de consentimiento digital de tu país.</li>
+    <li>Revisa si la herramienta conserva los prompts o los envía fuera del Espacio Económico Europeo.</li>
+    <li>Informa al alumnado de que se usa IA y de para qué. La decisión sobre la nota sigue siendo tuya.</li>
+  </ol>
+</section>
+
+<section id="simulador">
+  <div class="sec-head"><div class="eyebrow">Interactivo</div><h2>Semáforo a tu medida</h2><p>Elige lo que quieres hacer y con qué datos. El semáforo aplica las reglas de esta página y te dice por qué y qué hacer. Es una orientación, no asesoramiento jurídico, y la política del centro prevalece.</p></div>
+  <div class="sim" id="sim">
+    <fieldset class="q"><legend><b>1</b> ¿Qué quieres hacer?</legend><div class="opts">
+      <label class="opt"><input type="radio" name="uso" value="a"><span>Preparar materiales o rúbricas</span></label>
+      <label class="opt"><input type="radio" name="uso" value="b"><span>Dar al alumnado un tutor o asistente</span></label>
+      <label class="opt"><input type="radio" name="uso" value="c"><span>Retroalimentación sobre borradores</span></label>
+      <label class="opt"><input type="radio" name="uso" value="d"><span>Poner la nota o decidir nivel o promoción</span></label>
+      <label class="opt"><input type="radio" name="uso" value="e"><span>Detectar emociones o atención</span></label>
+      <label class="opt"><input type="radio" name="uso" value="f"><span>Vigilar un examen</span></label>
+    </div></fieldset>
+    <fieldset class="q"><legend><b>2</b> ¿Qué datos entran en la herramienta?</legend><div class="opts">
+      <label class="opt"><input type="radio" name="datos" value="n"><span>Ninguno personal (contenido propio o publicado)</span></label>
+      <label class="opt"><input type="radio" name="datos" value="s"><span>Textos del alumnado seudonimizados</span></label>
+      <label class="opt"><input type="radio" name="datos" value="i"><span>Nombres, fotos, voz, notas o expedientes</span></label>
+      <label class="opt"><input type="radio" name="datos" value="x"><span>Salud, necesidades especiales o situación familiar</span></label>
+    </div></fieldset>
+    <fieldset class="q"><legend><b>3</b> ¿Con qué cuenta?</legend><div class="opts">
+      <label class="opt"><input type="radio" name="cuenta" value="e"><span>Cuenta educativa administrada por el centro</span></label>
+      <label class="opt"><input type="radio" name="cuenta" value="p"><span>Cuenta personal</span></label>
+      <label class="opt"><input type="radio" name="cuenta" value="u"><span>No lo sé</span></label>
+    </div></fieldset>
+    <fieldset class="q"><legend><b>4</b> ¿El alumnado está por debajo de la edad de consentimiento digital de tu país?</legend><div class="opts">
+      <label class="opt"><input type="radio" name="edad" value="b"><span>Sí, por debajo</span></label>
+      <label class="opt"><input type="radio" name="edad" value="o"><span>No, por encima</span></label>
+      <label class="opt"><input type="radio" name="edad" value="u"><span>No lo sé</span></label>
+      <label class="opt"><input type="radio" name="edad" value="na"><span>No aplica, el alumnado no la usa</span></label>
+    </div></fieldset>
+    <div class="sim-actions"><button class="btn" type="button" id="sim-reset">Empezar de nuevo</button><span class="hint" id="sim-hint">Responde a las cuatro preguntas para ver el resultado.</span></div>
+    <div class="verdict" id="verdict" hidden aria-live="polite">
+      <div class="lamps" aria-hidden="true"><div class="lamp r"></div><div class="lamp a"></div><div class="lamp g"></div></div>
+      <div class="v-body">
+        <h3 id="v-title"></h3>
+        <div><h4>Por qué</h4><ul id="v-why"></ul></div>
+        <div><h4>Qué hacer</h4><ul id="v-do"></ul></div>
+        <p class="v-note">Cuando termines, recorre la <a href="#checklist">lista de comprobación</a>.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="checklist">
+  <div class="sec-head"><div class="eyebrow">Antes de llevarlo a clase</div><h2>Lista de seguridad para el docente</h2><p>Marca lo que ya tienes resuelto. Es una guía de comprobación basada en lo recogido en esta página, no un procedimiento oficial. Tu navegador puede recordar las marcas en este dispositivo.</p></div>
+  <div class="check" id="check">
+    <div class="progress"><div class="progress-top"><div id="cl-count">0 de 0</div><span>progreso</span></div><div class="bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="cl-bar"><i></i></div></div>
+    <div class="cl-group"><h3>Marco y centro</h3>
+      <label class="cl-item"><input type="checkbox" data-k="1"><span>He leído la política de IA de mi centro y sé qué herramientas admite.</span></label>
+      <label class="cl-item"><input type="checkbox" data-k="2"><span>Conozco la edad de consentimiento digital de mi país y la del alumnado.</span></label>
+      <label class="cl-item"><input type="checkbox" data-k="3"><span>Uso una cuenta educativa administrada por el centro, con el servicio activado por el administrador.</span></label>
+    </div>
+    <div class="cl-group"><h3>Datos</h3>
+      <label class="cl-item"><input type="checkbox" data-k="4"><span>No entran nombres, correos, fotos, voz, notas ni datos de salud del alumnado.</span></label>
+      <label class="cl-item"><input type="checkbox" data-k="5"><span>He revisado a mano los textos seudonimizados buscando detalles que identifiquen.</span></label>
+      <label class="cl-item"><input type="checkbox" data-k="6"><span>Sé si la herramienta conserva los prompts y si los datos salen del Espacio Económico Europeo.</span></label>
+    </div>
+    <div class="cl-group"><h3>Diseño de la tarea</h3>
+      <label class="cl-item"><input type="checkbox" data-k="7"><span>El asistente tiene instrucciones que le impiden dar la respuesta resuelta, y la tarea tiene límite de tiempo.</span></label>
+      <label class="cl-item"><input type="checkbox" data-k="8"><span>La actividad se cierra con una tarea sin IA para comprobar lo aprendido.</span></label>
+      <label class="cl-item"><input type="checkbox" data-k="9"><span>El alumnado contrasta las respuestas de la IA con otras fuentes.</span></label>
+    </div>
+    <div class="cl-group"><h3>Transparencia y evaluación</h3>
+      <label class="cl-item"><input type="checkbox" data-k="10"><span>El alumnado sabe que usa IA y para qué, y el material generado está señalado como tal.</span></label>
+      <label class="cl-item"><input type="checkbox" data-k="11"><span>La IA no pone la nota ni decide promoción ni orientación, y reviso toda retroalimentación antes de entregarla.</span></label>
+      <label class="cl-item"><input type="checkbox" data-k="12"><span>No se infieren emociones del alumnado ni se vigilan exámenes con IA.</span></label>
+    </div>
+    <div class="cl-group"><h3>Después</h3>
+      <label class="cl-item"><input type="checkbox" data-k="13"><span>Hay una alternativa para quien no tenga cuenta o consentimiento familiar.</span></label>
+      <label class="cl-item"><input type="checkbox" data-k="14"><span>Anoto qué herramienta uso, para qué y con qué configuración.</span></label>
+      <label class="cl-item"><input type="checkbox" data-k="15"><span>Revisaré esta guía cuando cambie la normativa, con fechas próximas el 2 de diciembre de 2026 y el 2 de diciembre de 2027.</span></label>
+    </div>
+    <div class="done-msg" id="cl-done" hidden>Lista completa. Revisa de todos modos la política de tu centro y la normativa de tu país.</div>
+    <div class="sim-actions"><button class="btn" type="button" id="cl-reset">Desmarcar todo</button></div>
+  </div>
+</section>
+
+<section id="usos">
+  <div class="sec-head"><div class="eyebrow">Para llevar a clase</div><h2>Alternativas de uso educativo</h2><p>Cada ficha indica su respaldo. Las etiquetas distinguen evidencia experimental, metaanálisis con límites y práctica profesional sin evidencia contrastada.</p></div>
+  <div class="chips" role="group" aria-label="Filtrar por destreza">
+    <button class="chip" type="button" data-filter="todos" aria-pressed="true">Todas</button>
+    <button class="chip" type="button" data-filter="escritura" aria-pressed="false">Escritura</button>
+    <button class="chip" type="button" data-filter="oral" aria-pressed="false">Oral</button>
+    <button class="chip" type="button" data-filter="lectura" aria-pressed="false">Lectura</button>
+    <button class="chip" type="button" data-filter="critico" aria-pressed="false">Pensamiento crítico</button>
+    <button class="chip" type="button" data-filter="materiales" aria-pressed="false">Materiales docentes</button>
+  </div>
+  <div class="cards" id="cards">
+
+    <article class="card" data-tags="escritura critico">
+      <div class="badges"><span class="ev exp">Evidencia experimental</span><span class="skill">Escritura</span><span class="skill">Pensamiento crítico</span></div>
+      <h3>Tutor socrático con tarea guiada</h3>
+      <p>Un asistente configurado para no dar la respuesta y devolver preguntas. En un ensayo con cerca de mil estudiantes de secundaria, el chat sin salvaguardas dejó al grupo un 17% peor que el de control en el examen sin IA. La versión con salvaguardas neutralizó ese daño. En física universitaria, un tutor diseñado con principios de aprendizaje activo superó a una clase activa.</p>
+      <p class="how"><b>Condición.</b> Ningún estudio es de lenguas. Define en el prompt lo que el asistente no puede hacer, limita el tiempo y cierra con una tarea sin IA para comprobar lo aprendido.</p>
+    </article>
+
+    <article class="card" data-tags="oral escritura">
+      <div class="badges"><span class="ev mta">Metaanálisis con límites</span><span class="skill">Oral</span><span class="skill">Escritura</span></div>
+      <h3>Práctica conversacional guiada</h3>
+      <p>Un metaanálisis de 28 estudios encontró un efecto positivo de los chatbots en el rendimiento lingüístico. Otro, de 51 estudios, halló las mayores ganancias en destrezas productivas, escritura y expresión oral.</p>
+      <p class="how"><b>Condición.</b> Las fuentes trabajan sobre todo con inglés como lengua extranjera y piden más estudios longitudinales. Usa situaciones comunicativas con un objetivo evaluable y transcripciones sin nombres si las guardas.</p>
+    </article>
+
+    <article class="card" data-tags="escritura">
+      <div class="badges"><span class="ev prac">Práctica sin evidencia</span><span class="skill">Escritura</span></div>
+      <h3>Retroalimentación formativa sobre borradores</h3>
+      <p>La IA señala categorías de error o pregunta por la intención de una frase, y el alumnado reescribe. Encaja con la regla de que la evaluación sigue en manos humanas.</p>
+      <p class="how"><b>Condición.</b> Sin nota automática, con revisión docente y con borradores seudonimizados.</p>
+    </article>
+
+    <article class="card" data-tags="critico lectura">
+      <div class="badges"><span class="ev mta">Respaldo parcial</span><span class="skill">Pensamiento crítico</span><span class="skill">Lectura</span></div>
+      <h3>Contrastar y corregir un texto generado por IA</h3>
+      <p>El alumnado detecta errores, imprecisiones culturales o sesgos en una respuesta y la reescribe con fuentes. Los autores del ensayo de matemáticas reportan en un seminario que las intervenciones que entrenan a interactuar críticamente con la IA pueden ser beneficiosas.</p>
+      <p class="how"><b>Condición.</b> El respaldo viene de un resumen de seminario, no del artículo completo. Conviene usar textos con errores verificables.</p>
+    </article>
+
+    <article class="card" data-tags="oral escritura lectura">
+      <div class="badges"><span class="ev prac">Práctica sin evidencia</span><span class="skill">Oral</span><span class="skill">Escritura</span><span class="skill">Lectura</span></div>
+      <h3>Mediación lingüística con apoyo de IA</h3>
+      <p>El alumnado media un texto para otro destinatario, compara su versión con la que propone la IA y justifica sus decisiones. Conecta con la mediación del MCER 2018 y convierte la IA en término de comparación, no en autora.</p>
+      <p class="how"><b>Condición.</b> Pide la versión del alumnado antes de mostrar la de la IA. Es una propuesta de diseño, no un resultado probado.</p>
+    </article>
+
+    <article class="card" data-tags="materiales lectura">
+      <div class="badges"><span class="ev prac">Práctica sin evidencia</span><span class="skill">Materiales docentes</span><span class="skill">Lectura</span></div>
+      <h3>Textos con nivel controlado</h3>
+      <p>El docente genera lecturas y las ajusta a un nivel del MCER. Sin datos personales, es el uso con menos fricción normativa.</p>
+      <p class="how"><b>Condición.</b> Un modelo no garantiza el nivel que se le pide. Comprueba el resultado con el PCIC y con textos de referencia antes de usarlo.</p>
+    </article>
+
+    <article class="card" data-tags="materiales">
+      <div class="badges"><span class="ev prac">Práctica sin evidencia</span><span class="skill">Materiales docentes</span></div>
+      <h3>Actividades interactivas autocorregibles</h3>
+      <p>La IA ayuda a programar ejercicios, juegos o pantallas de práctica con clave cerrada. La corrección en el momento de uso no depende de IA, lo que reduce la exposición de datos.</p>
+      <p class="how"><b>Condición.</b> Revisa cada ítem y cada solución antes de publicar. Comprueba si la política de tu centro dice algo sobre herramientas externas.</p>
+    </article>
+
+    <article class="card" data-tags="escritura materiales">
+      <div class="badges"><span class="ev prac">Práctica sin evidencia</span><span class="skill">Escritura</span><span class="skill">Materiales docentes</span></div>
+      <h3>Análisis de errores del grupo</h3>
+      <p>Con textos del alumnado agregados y sin nombres, la IA ayuda a localizar patrones de error para planificar la siguiente secuencia.</p>
+      <p class="how"><b>Condición.</b> Es el uso que más se acerca a los datos personales. Anonimiza antes de subir y evita herramientas que conserven los prompts.</p>
+    </article>
+
+    <article class="card" data-tags="materiales lectura">
+      <div class="badges"><span class="ev prac">Práctica sin evidencia</span><span class="skill">Materiales docentes</span><span class="skill">Lectura</span></div>
+      <h3>Adaptaciones y apoyos de accesibilidad</h3>
+      <p>Glosarios, versiones con distinto andamiaje y reformulaciones de consignas para atender ritmos diferentes dentro del mismo grupo.</p>
+      <p class="how"><b>Condición.</b> Si la adaptación parte de datos de un alumno concreto, entra en el terreno de datos sensibles. Trabaja sobre perfiles genéricos, no sobre casos individuales.</p>
+    </article>
+
+    <article class="card" data-tags="escritura lectura critico">
+      <div class="badges"><span class="ev prac">Práctica sin evidencia</span><span class="skill">Escritura</span><span class="skill">Lectura</span><span class="skill">Pensamiento crítico</span></div>
+      <h3>NotebookLM como tutor socrático sobre fuentes del docente</h3>
+      <p>El docente sube un corpus acotado, por ejemplo un capítulo, un relato o la guía de un examen, y el alumnado conversa solo con ese material. Una guía de un servicio educativo británico indica que la versión para estudiantes trabaja únicamente con el contenido que se sube. Se pide al asistente que formule preguntas en lugar de dar respuestas, la misma lógica de salvaguardas que mejoró los resultados en los ensayos de tutores.</p>
+      <p class="how"><b>Condición.</b> Usa una cuenta educativa del centro. En Classroom puedes adjuntar el cuaderno a una tarea, siempre que el administrador haya activado NotebookLM para tu grupo y el de tu alumnado. Pide al alumnado que cite el pasaje en el que se apoya cada respuesta.</p>
+    </article>
+
+    <article class="card" data-tags="escritura oral critico">
+      <div class="badges"><span class="ev prac">Práctica sin evidencia</span><span class="skill">Escritura</span><span class="skill">Oral</span><span class="skill">Pensamiento crítico</span></div>
+      <h3>Gems con instrucciones de tutor</h3>
+      <p>Un Gem es un asistente de Gemini con instrucciones fijas. Sirve para fijar el rol (tutor que pregunta, interlocutor de un diálogo, corrector formativo), el nivel de lengua y lo que no debe hacer, como reescribir el texto del alumno.</p>
+      <p class="how"><b>Condición.</b> Desde Classroom puedes crear un Gem y adjuntarlo a una tarea o material, y el alumnado accede desde ese elemento mientras siga en la clase. Google lo describe para alumnado de todas las edades, siempre que el administrador active Gemini y el uso compartido de Gems, y no menciona un mínimo de edad para cuentas educativas. El límite de 13 años que cita Google es para las cuentas personales de NotebookLM. El soporte de Google indica además que los Gems se descontinuarán a partir del 1 de junio de 2027, así que compruébalo antes de basar una secuencia en ellos. Prueba el Gem con ejemplos de error antes de usarlo en clase.</p>
+    </article>
+
+    <article class="card" data-tags="materiales">
+      <div class="badges"><span class="ev prac">Práctica sin evidencia</span><span class="skill">Materiales docentes</span></div>
+      <h3>Artefactos con backend, con cuenta educativa</h3>
+      <p>Una página HTML conectada a una hoja de cálculo mediante Apps Script permite recoger respuestas, mostrar resultados y guardar el progreso. Con una cuenta educativa, la hoja y el script viven dentro del dominio del centro, bajo sus condiciones y con sus controles de administración.</p>
+      <p class="how"><b>Condición.</b> Los límites de Apps Script para cuentas de Workspace son más amplios: 6 horas diarias de ejecución de disparadores, 1.500 destinatarios de correo al día y 100.000 llamadas de URL Fetch. Para el tratamiento de datos, conviene consultar con el responsable de protección de datos del centro.</p>
+    </article>
+
+    <article class="card" data-tags="materiales">
+      <div class="badges"><span class="ev prac">Práctica sin evidencia</span><span class="skill">Materiales docentes</span></div>
+      <h3>Artefactos con backend, sin cuenta educativa</h3>
+      <p>Con una cuenta personal funciona la misma arquitectura, pero con límites menores: 90 minutos diarios de disparadores, 100 destinatarios de correo al día y 20.000 llamadas de URL Fetch. Ambos tipos de cuenta comparten el máximo de 6 minutos por ejecución.</p>
+      <p class="how"><b>Condición.</b> Si el artefacto guarda respuestas del alumnado, el backend debe estar en una cuenta educativa del centro. Para material sin datos personales, como ejercicios con autocorrección que no guardan nada, el riesgo es menor.</p>
+    </article>
+
+    <article class="card" data-tags="materiales escritura lectura oral">
+      <div class="badges"><span class="ev prac">Práctica sin evidencia</span><span class="skill">Materiales docentes</span><span class="skill">Escritura</span><span class="skill">Lectura</span><span class="skill">Oral</span></div>
+      <h3>Fichas, rúbricas y simulacros para ELE</h3>
+      <p>La IA acelera el borrador de fichas por destreza, rúbricas alineadas con el MCER y simulacros de examen con clave cerrada. El docente conserva la tarea de decidir qué entra, qué se descarta y cómo se califica.</p>
+      <p class="how"><b>Condición.</b> Comprueba el nivel con el PCIC, resuelve tú cada ítem antes de usarlo y revisa que haya una sola respuesta correcta y que no falle la precisión cultural. Elimina cualquier dato personal antes de subir material real del alumnado.</p>
+    </article>
+
+  </div>
+</section>
+
+<section id="evidencia">
+  <div class="sec-head"><div class="eyebrow">Lo que sí hay</div><h2>Evidencia disponible y sus límites</h2></div>
+  <p>La evidencia más sólida sobre tutores con IA sale de matemáticas y física, no de lenguas. En lenguas abundan los metaanálisis, con efectos muy dispares entre sí.</p>
+  <div class="tablewrap">
+    <table>
+      <thead><tr><th>Estudio</th><th>Muestra</th><th>Resultado</th><th>Límite</th></tr></thead>
+      <tbody>
+        <tr><td>Bastani et al., 2025, PNAS</td><td>Cerca de 1.000 estudiantes de secundaria, matemáticas, Turquía</td><td>Con chat sin salvaguardas, mejor rendimiento en la práctica y un 17% peor en el examen sin IA. Con tutor con salvaguardas, daño mitigado.</td><td>Matemáticas, un solo centro.</td></tr>
+        <tr><td>Kestin et al., 2025, Scientific Reports</td><td>194 universitarios, física, Harvard</td><td>Más aprendizaje que una clase de aprendizaje activo, en menos tiempo y con más implicación.</td><td>Muestra selecta, dos temas, corto plazo.</td></tr>
+        <tr><td>Metaanálisis de chatbots, HKU</td><td>28 estudios, 70 tamaños de efecto</td><td>Efecto global positivo, g = 0,484.</td><td>Revisión sobre chatbots en el aprendizaje de lenguas.</td></tr>
+        <tr><td>Saarela et al., 2026</td><td>51 estudios, 175 tamaños de efecto</td><td>Mejora en rendimiento y variables afectivas, mayor en escritura y expresión oral.</td><td>Piden más estudios longitudinales y mayor rigor.</td></tr>
+        <tr><td>Ekizer, 2025, Acta Psychologica</td><td>23 estudios sobre inglés como lengua extranjera</td><td>Efecto global grande, g = 1,10, con intervalo de 0,75 a 1,44.</td><td>Intervalo de confianza amplio.</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section id="normativa">
+  <div class="sec-head"><div class="eyebrow">Referencias citadas</div><h2>Normativa y documentos de referencia</h2><p>Los textos que sustentan esta página, ordenados por su valor jurídico. Cada ficha indica la fecha y lo que aporta al aula.</p></div>
+
+  <div class="norm-group">
+    <h3>Vinculante en la Unión Europea</h3>
+    <div class="norms">
+      <article class="norm bind"><span class="vj">Reglamento, vinculante</span>
+        <h4>Reglamento de Inteligencia Artificial</h4>
+        <div class="cite">Reglamento (UE) 2024/1689, de 13 de junio de 2024</div>
+        <p>Prohíbe prácticas como la inferencia de emociones en centros educativos (art. 5), exige alfabetización en IA (art. 4) y transparencia (art. 50), y clasifica como alto riesgo los sistemas educativos del Anexo III.</p>
+        <a class="lnk" href="https://eur-lex.europa.eu/eli/reg/2024/1689/oj">Texto en EUR-Lex</a></article>
+      <article class="norm bind"><span class="vj">Reglamento, vinculante</span>
+        <h4>Digital Omnibus sobre IA</h4>
+        <div class="cite">Reglamento (UE) 2026/1744, en vigor desde el 27 de julio de 2026</div>
+        <p>Aplaza el alto riesgo del Anexo III, educación incluida, al 2 de diciembre de 2027 y reformula el artículo 4 sobre alfabetización.</p>
+        <a class="lnk" href="https://artificialintelligenceact.eu/ai-act-explorer/digital-omnibus/">Texto en AI Act Explorer</a></article>
+      <article class="norm bind"><span class="vj">Reglamento, vinculante</span>
+        <h4>Reglamento General de Protección de Datos</h4>
+        <div class="cite">Reglamento (UE) 2016/679</div>
+        <p>El artículo 8 fija en 16 años el consentimiento digital, con posibilidad de bajarlo a 13 por ley nacional. El artículo 9 protege de forma reforzada categorías especiales como los datos de salud.</p>
+        <a class="lnk" href="https://gdpr-text.com/read/article-8/?lang1=en">Artículo 8 del RGPD</a></article>
+    </div>
+  </div>
+
+  <div class="norm-group">
+    <h3>Tratado internacional</h3>
+    <div class="norms">
+      <article class="norm treaty"><span class="vj">Tratado del Consejo de Europa</span>
+        <h4>Convenio Marco sobre Inteligencia Artificial y Derechos Humanos, Democracia y Estado de Derecho</h4>
+        <div class="cite">Abierto a la firma el 5 de septiembre de 2024 en Vilna</div>
+        <p>El Consejo de la Unión Europea aprobó su conclusión mediante la Decisión (UE) 2026/1080, de 21 de abril de 2026, y el Parlamento Europeo dio su visto bueno el 11 de marzo de 2026. Según el Consejo de Europa, la UE lo ratificó en mayo de 2026 y es su primera Parte.</p>
+        <a class="lnk" href="https://eur-lex.europa.eu/eli/dec/2026/1080/oj">Decisión 2026/1080 en EUR-Lex</a></article>
+    </div>
+  </div>
+
+  <div class="norm-group">
+    <h3>Orientaciones de las instituciones europeas, no vinculantes</h3>
+    <div class="norms">
+      <article class="norm"><span class="vj">Directrices, no vinculantes</span>
+        <h4>Directrices de la Comisión sobre prácticas de IA prohibidas</h4>
+        <div class="cite">Comisión Europea, 4 de febrero de 2025, art. 5 del Reglamento 2024/1689</div>
+        <p>Tratan el reconocimiento de emociones en entornos educativos como prohibido, con excepciones acotadas por motivos médicos o de seguridad.</p>
+        <a class="lnk" href="https://eucrim.eu/news/guidelines-on-prohibited-ai-practices/">Resumen en eucrim</a></article>
+      <article class="norm"><span class="vj">Directrices, no vinculantes</span>
+        <h4>Directrices éticas sobre el uso de IA y datos en la enseñanza y el aprendizaje, para docentes</h4>
+        <div class="cite">Comisión Europea, 25 de octubre de 2022, página actualizada el 28 de junio de 2024</div>
+        <p>Pensadas para profesorado de primaria y secundaria. Anteriores a la generalización de la IA generativa.</p>
+        <a class="lnk" href="https://education.ec.europa.eu/news/ethical-guidelines-on-the-use-of-artificial-intelligence-and-data-in-teaching-and-learning-for-educators">Ficha de la Comisión</a></article>
+      <article class="norm"><span class="vj">Recomendación del Consejo</span>
+        <h4>Factores facilitadores clave para una educación y formación digitales eficaces</h4>
+        <div class="cite">Recomendación del Consejo de 23 de noviembre de 2023, DO C/2024/1115</div>
+        <p>Marco de apoyo a los Estados miembros para la educación digital.</p>
+        <a class="lnk" href="https://eur-lex.europa.eu/eli/C/2024/1115/oj">Texto en EUR-Lex</a></article>
+      <article class="norm"><span class="vj">Marco de competencias, no vinculante</span>
+        <h4>DigComp 3.0, Marco Europeo de Competencia Digital, quinta edición</h4>
+        <div class="cite">Centro Común de Investigación (JRC) con la DG EMPL, publicado en noviembre de 2025</div>
+        <p>Mantiene cinco áreas y 21 competencias, y recoge conocimientos, destrezas y actitudes sobre IA en las 21. Añade contenido sobre ciberseguridad, desinformación, bienestar digital y derechos, y supera los 500 enunciados de resultados de aprendizaje.</p>
+        <a class="lnk" href="https://joint-research-centre.ec.europa.eu/digcomp/digcomp-framework_en">Página del JRC</a></article>
+      <article class="norm"><span class="vj">Marco de competencias, no vinculante</span>
+        <h4>Marco de Alfabetización en IA (AILit) para educación primaria y secundaria</h4>
+        <div class="cite">Comisión Europea y OCDE, presentado el 18 de junio de 2026</div>
+        <p>Cuatro dimensiones, que describen cómo el alumnado interactúa con la IA, produce con ella, la supervisa y influye en ella, y 19 competencias de conocimientos, destrezas y actitudes. Incluye ejemplos de aula. La Comisión lo presenta como referencia común no vinculante.</p>
+        <a class="lnk" href="https://education.ec.europa.eu/node/3537">Anuncio de la Comisión</a></article>
+    </div>
+  </div>
+
+  <div class="norm-group">
+    <h3>UNESCO, no vinculante</h3>
+    <div class="norms">
+      <article class="norm"><span class="vj">Guía, no vinculante</span>
+        <h4>Guía para la IA generativa en la educación y la investigación</h4>
+        <div class="cite">UNESCO, 2023, 44 páginas, ISBN 978-92-3-100612-8</div>
+        <p>Pide regular la privacidad de los datos y fijar un límite de edad para las conversaciones autónomas con plataformas de IA generativa. La ficha consultada no precisa qué edad.</p>
+        <a class="lnk" href="https://gcedclearinghouse.org/en/node/129341">Ficha del documento</a></article>
+      <article class="norm"><span class="vj">Marco de competencias, no vinculante</span>
+        <h4>Marco de competencias en IA para el alumnado</h4>
+        <div class="cite">UNESCO, 2024, presentado en la Digital Learning Week, código pf0000391105</div>
+        <p>Cuatro dimensiones: mentalidad centrada en las personas, ética de la IA, técnicas y aplicaciones de la IA, y diseño de sistemas de IA. El número de 12 competencias que cito arriba procede de las fuentes anteriores, no de una lectura directa del documento.</p>
+        <a class="lnk" href="https://unesco.org.nz/knowledge-hub/unesco-ai-competency-framework-for-students-and-teachers">Resumen de ambos marcos</a></article>
+      <article class="norm"><span class="vj">Marco de competencias, no vinculante</span>
+        <h4>Marco de competencias en IA para el profesorado</h4>
+        <div class="cite">UNESCO, 2024, código pf0000391104, ISBN 978-92-3-100707-1</div>
+        <p>Quince competencias en cinco dimensiones: mentalidad centrada en las personas, ética de la IA, fundamentos y aplicaciones de la IA, pedagogía de la IA e IA para el desarrollo profesional. Tres niveles de progresión: adquirir, profundizar y crear.</p>
+        <a class="lnk" href="https://gcedclearinghouse.org/en/node/146447?level=2">Ficha del documento</a></article>
+    </div>
+  </div>
+
+</section>
+
+<section id="paises">
+  <div class="sec-head"><div class="eyebrow">Capa nacional</div><h2>Normativa y orientaciones por país</h2><p>Elige un país. Cada pestaña separa lo vinculante de las orientaciones. Estado a 31 de octubre de 2026.</p></div>
+  <div class="tablist" role="tablist" aria-label="País"><button class="tab" type="button" role="tab" id="tab-espana" aria-controls="panel-espana" aria-selected="true" tabindex="0">España</button><button class="tab" type="button" role="tab" id="tab-italia" aria-controls="panel-italia" aria-selected="false" tabindex="-1">Italia</button><button class="tab" type="button" role="tab" id="tab-francia" aria-controls="panel-francia" aria-selected="false" tabindex="-1">Francia</button><button class="tab" type="button" role="tab" id="tab-portugal" aria-controls="panel-portugal" aria-selected="false" tabindex="-1">Portugal</button></div>
+  <div class="tabpanel" role="tabpanel" id="panel-espana" aria-labelledby="tab-espana">
+  <div class="agebadge"><div class="age-num">14<small>años</small></div><p>Edad de consentimiento digital en España, según el artículo 7.1 de la LOPDGDD.</p></div>
+    <div class="callout">En vigor y vinculante hay normativa de protección de datos, la LOPDGDD. Sobre IA en el aula existen guías y marcos de referencia sin carácter normativo, y dos proyectos de ley orgánica en tramitación en el Congreso.</div>
+
+  <div class="norm-group">
+    <h3>En vigor y vinculante</h3>
+    <div class="norms">
+      <article class="norm bind"><span class="vj">Ley orgánica, vinculante</span>
+        <h4>Ley Orgánica de Protección de Datos Personales y garantía de los derechos digitales (LOPDGDD)</h4>
+        <div class="cite">Ley Orgánica 3/2018, de 5 de diciembre, BOE-A-2018-16673</div>
+        <p>Según la AEPD, el artículo 7.1 permite que las personas de 14 a 18 años consientan por sí mismas el tratamiento de sus datos, salvo que una ley exija la asistencia de sus padres o tutores. Por debajo de 14, consiente quien ejerce la patria potestad o la tutela, y el responsable debe hacer esfuerzos razonables para verificarlo.</p>
+        <a class="lnk" href="https://www.aepd.es/infografias/infografia-consentimiento-menores.pdf">Infografía de la AEPD</a></article>
+    </div>
+  </div>
+
+  <div class="norm-group">
+    <h3>En tramitación parlamentaria</h3>
+    <div class="norms">
+      <article class="norm treaty"><span class="vj">Proyecto de ley, no aprobado</span>
+        <h4>Proyecto de Ley Orgánica para el buen uso y la gobernanza de la inteligencia artificial</h4>
+        <div class="cite">Publicado en el BOCG el 12 de junio de 2026, Comisión de Economía, Comercio y Transformación Digital</div>
+        <p>Desarrolla en España el Reglamento (UE) 2024/1689: supervisión nacional, espacios controlados de pruebas, uso de IA en el sector público estatal y régimen sancionador, con multas de hasta 35 millones de euros o el 7 % del volumen de negocio mundial por prácticas prohibidas. La Agencia Española de Supervisión de Inteligencia Artificial (AESIA) sería punto de contacto único y autoridad de vigilancia del mercado para determinados sistemas. El plazo de enmiendas terminaba el 30 de junio de 2026.</p>
+        <a class="lnk" href="https://finreg360.com/alerta/el-congreso-inicia-el-tramite-del-proyecto-de-ley-organica-para-el-buen-uso-y-la-gobernanza-de-la-inteligencia-artificial/">Resumen en FinReg360</a></article>
+      <article class="norm treaty"><span class="vj">Proyecto de ley, no aprobado</span>
+        <h4>Proyecto de Ley Orgánica para la protección de las personas menores de edad en los entornos digitales</h4>
+        <div class="cite">Congreso: Mesa del 8 de abril de 2025, tramitación por urgencia desde el 6 de mayo de 2025</div>
+        <p>El Congreso aprobó su tramitación el 10 de septiembre de 2025 al rechazar la enmienda a la totalidad. Según el Ministerio de Justicia, sube de 14 a 16 años la edad mínima para registrarse en redes sociales y obliga a los centros a regular expresamente el uso de móviles, ordenadores, tabletas y otros dispositivos digitales.</p>
+        <a class="lnk" href="https://www.mjusticia.gob.es/es/institucional/gabinete-comunicacion/noticias-ministerio/100925-tramitacion-lo-proteccion-menores-entornos">Nota del Ministerio de Justicia</a></article>
+    </div>
+  </div>
+
+  <div class="norm-group">
+    <h3>Orientaciones y marcos de referencia, no normativos</h3>
+    <div class="norms">
+      <article class="norm"><span class="vj">Guía, orientativa</span>
+        <h4>Guía sobre el uso de la inteligencia artificial en el ámbito educativo, versión 2.0</h4>
+        <div class="cite">INTEF, Ministerio de Educación, Formación Profesional y Deportes, septiembre de 2026, 105 páginas, ISBN 9789200275692</div>
+        <p>Es la versión 2.0 de la guía, publicada el 8 de septiembre de 2026. Se organiza en tres perfiles, alumnado, profesorado y centro, con principios éticos, privacidad, equidad, transparencia e integridad académica. Incluye situaciones de aprendizaje, un modelo de declaración de uso de IA y un cuestionario para el alumnado. El INTEF la presenta como orientaciones y recomendaciones.</p>
+        <a class="lnk" href="https://intef.es/Noticias/nueva-version-de-la-guia-sobre-el-uso-de-la-inteligencia-artificial-en-el-ambito-educativo/">Noticia del INTEF</a> <a class="lnk" href="https://www.libreria.educacion.gob.es/libro/guia-sobre-el-uso-de-la-inteligencia-artificial-en-el-ambito-educativo_187146/">Ficha en la librería del Ministerio</a></article>
+      <article class="norm"><span class="vj">Marco de referencia</span>
+        <h4>Marco de Referencia de la Competencia Digital Docente</h4>
+        <div class="cite">Resolución de 4 de mayo de 2022, BOE núm. 116, de 16 de mayo de 2022, BOE-A-2022-8042</div>
+        <p>Acordado en la Conferencia Sectorial de Educación el 30 de marzo de 2022. Sustituye al marco de 2020. Su área 1 incluye la competencia 1.5, protección de datos personales, privacidad, seguridad y bienestar digital.</p>
+        <a class="lnk" href="https://www.boe.es/boe/dias/2022/05/16/pdfs/BOE-A-2022-8042.pdf">Texto en el BOE</a></article>
+    </div>
+  </div>
+
+  </div>
+  <div class="tabpanel" role="tabpanel" id="panel-italia" aria-labelledby="tab-italia" hidden>
+  <div class="agebadge"><div class="age-num">14<small>años</small></div><p>Edad de consentimiento digital en Italia, según el artículo 2 quinquies del Codice privacy.</p></div>
+  <div class="callout">Italia cuenta con una ley específica de IA en vigor, la Ley 132/2025, que regula el acceso de los menores a la IA, y con un decreto legislativo de adaptación al Reglamento europeo, el D.Lgs. 179/2026, en vigor desde el 23 de octubre de 2026. El Ministerio de Educación publicó además sus líneas guía para los centros.</div>
+
+  <div class="norm-group">
+    <h3>En vigor y vinculante</h3>
+    <div class="norms">
+      <article class="norm bind"><span class="vj">Ley, vinculante</span>
+        <h4>Disposiciones y delegaciones al Gobierno en materia de inteligencia artificial</h4>
+        <div class="cite">Legge 23 settembre 2025, n. 132, Gazzetta Ufficiale n. 223 de 25 de septiembre de 2025, en vigor desde el 10 de octubre de 2025</div>
+        <p>El artículo 4, apartado 4, exige el consentimiento de quien ejerce la responsabilidad parental para que los menores de 14 años accedan a tecnologías de IA y para el tratamiento de sus datos. Entre los 14 y los 18 años pueden consentir por sí mismos, siempre que la información sea accesible y comprensible. El artículo 24 prevé itinerarios de alfabetización y formación sobre el uso de sistemas de IA, y el artículo 20 designa a AgID y ACN como autoridades nacionales de IA, sin perjuicio de las competencias del Garante de protección de datos. El texto oficial figura en la Gazzetta Ufficiale y en Normattiva.</p>
+        <a class="lnk" href="https://ai-resources.eu/atti-normativi/italia/legge-132-2025/">Texto en AI Resources</a></article>
+      <article class="norm bind"><span class="vj">Decreto legislativo, vinculante</span>
+        <h4>Adaptación nacional al Reglamento (UE) 2024/1689</h4>
+        <div class="cite">D.Lgs. 7 de octubre de 2026, n. 179, Gazzetta Ufficiale n. 234 de 8 de octubre de 2026, en vigor desde el 23 de octubre de 2026</div>
+        <p>Consta de 54 artículos y desarrolla la Ley 132/2025. ACN actúa como autoridad de vigilancia del mercado y punto de contacto único con la UE, AgID como autoridad notificante, y Banca d'Italia, Consob e IVASS vigilan los sistemas de alto riesgo de sus sectores. Las sanciones del artículo 23 llegan a 35 millones de euros o el 7 % del volumen de negocio mundial por prácticas prohibidas, y a 15 millones o el 3 % por incumplir otras obligaciones, entre ellas las de quienes despliegan sistemas. Los artículos 36 a 51 tratan el uso y la formación en IA en escuelas, universidades, administración pública, empleo y profesiones. El artículo 38 manda adoptar un decreto del Ministerio de Educación con los criterios de formación del profesorado en 90 días desde la entrada en vigor, y el artículo 37 asigna hasta 100 millones de euros del programa PN Scuola e Competenze 2021-2027.</p>
+        <a class="lnk" href="https://www.noze.it/en/insights/ai-decree-179-2026-gazette/">Resumen en Noze</a> <a class="lnk" href="https://www.ai4business.it/intelligenza-artificiale/ai-act-in-vigore-il-decreto-attuativo-italiano/">Análisis en AI4Business</a> <a class="lnk" href="https://www.gazzettaufficiale.it/eli/id/2026/10/08/26G00200/sg">Gazzetta Ufficiale</a></article>
+      <article class="norm bind"><span class="vj">Código, vinculante</span>
+        <h4>Codice in materia di protezione dei dati personali</h4>
+        <div class="cite">Artículo 2 quinquies, introducido por el D.Lgs. 101/2018</div>
+        <p>Desde los 14 años una persona menor puede consentir el tratamiento de sus datos en la oferta directa de servicios de la sociedad de la información. Por debajo, consiente quien ejerce la responsabilidad parental. Italia usó así el margen del artículo 8 del RGPD, que fija 16 años por defecto y permite bajar hasta 13. El responsable debe redactar la información en un lenguaje comprensible para el menor.</p>
+        <a class="lnk" href="https://www.agendadigitale.eu/sicurezza/privacy/il-consenso-digitale-del-minore-dopo-il-decreto-gdpr-101-2018/">Explicación en Agenda Digitale</a></article>
+    </div>
+  </div>
+
+  <div class="norm-group">
+    <h3>Orientaciones del ministerio</h3>
+    <div class="norms">
+      <article class="norm"><span class="vj">Líneas guía del MIM</span>
+        <h4>Líneas guía para la introducción de la inteligencia artificial en las instituciones escolares</h4>
+        <div class="cite">Decreto ministeriale n. 166 de 9 de agosto de 2025, Ministero dell'Istruzione e del Merito, 34 páginas, con dictamen favorable del Garante</div>
+        <p>Se dirigen a equipos directivos, profesorado, personal administrativo y alumnado. Parten de un enfoque antropocéntrico, con supervisión humana continua, y establecen que la evaluación final corresponde al docente y que ningún sistema emite juicios evaluativos autónomos. Prohíben alimentar sistemas generativos con datos personales o sensibles del alumnado y del personal. Admiten usos como contenidos adaptativos, traducción de textos para alumnado extranjero y apoyos visuales y de audio para alumnado con necesidades educativas especiales. Señalan como riesgos las alucinaciones, el plagio y la dependencia cognitiva, y piden formación del profesorado y actividades para verificar fuentes.</p>
+        <p>Se estructuran en cuatro pilares: principios, requisitos básicos, marco de aplicación, y comunicación y gobernanza. El equipo directivo coordina la introducción de la IA y designa referentes internos, y los proyectos se registran en la plataforma UNICA mediante una «Scheda progetto IA». Antes hubo un piloto en 15 centros de Calabria, Lazio, Lombardía y Toscana.</p>
+        <a class="lnk" href="https://www.mim.gov.it/documents/20182/0/MIM_Linee+guida+IA+nella+Scuola_09_08_2025-signed.pdf/b70fdc45-4b75-1f7e-73bf-eab12989b928?t=1756468797694">Documento del MIM</a> <a class="lnk" href="https://www.newsistruzione.it/2026/09/24/intelligenza-artificiale-scuola-linee-guida-mim">Resumen en News Istruzione</a> <a class="lnk" href="https://www.tecnicadellascuola.it/intelligenza-artificiale-nelle-scuole-ecco-le-linee-guida-pubblicate-dal-mim">Resumen en Tecnica della Scuola</a> <a class="lnk" href="https://eurydice.eacea.ec.europa.eu/news/italy-guidelines-use-artificial-intelligence-schools">Ficha de Eurydice</a></article>
+    </div>
+  </div>
+  </div>
+  <div class="tabpanel" role="tabpanel" id="panel-francia" aria-labelledby="tab-francia" hidden>
+  <div class="agebadge"><div class="age-num">15<small>años</small></div><p>Edad de consentimiento digital en Francia.</p></div>
+  <div class="callout">Francia cuenta con un marco de uso de la IA en educación publicado por el Ministerio de Educación Nacional en junio de 2025, con reglas por etapa, y con dos FAQ de la CNIL sobre protección de datos en los centros.</div>
+
+  <div class="norm-group">
+    <h3>Orientaciones del ministerio y de la autoridad de datos</h3>
+    <div class="norms">
+      <article class="norm"><span class="vj">Marco de uso, no normativo</span>
+        <h4>Cadre d'usage de l'IA en éducation</h4>
+        <div class="cite">Ministère de l'Éducation nationale, versión definitiva de junio de 2025, tras consulta de enero a mayo de 2025</div>
+        <p>En primaria no hay manipulación directa de IA generativa, solo sensibilización. A partir de 4e, en el collège, el alumnado puede usarla dentro de un marco pedagógico fijado por el docente, y en el lycée el uso se limita al marco que definen los profesores. La formación es obligatoria al menos en 4e, seconde y CAP. Un trabajo hecho con IA generativa sin autorización expresa del docente se considera fraude. El marco pide priorizar soluciones abiertas y respetar estrictamente el RGPD.</p>
+        <a class="lnk" href="https://www.education.gouv.fr/publication-du-cadre-d-usage-de-l-intelligence-artificielle-en-education-462936">Publicación del ministerio</a> <a class="lnk" href="https://www.ekole.fr/blog/intelligence-artificielle-ecole-prevoit-cadre-dusage-publie">Resumen en Ekole</a> <a class="lnk" href="https://www.letudiant.fr/educpros/actualite/intelligence-artificielle-leducation-nationale-propose-des-regles-dutilisation-aux-eleves-et-aux-enseignants.html">Artículo de L'Étudiant</a></article>
+      <article class="norm"><span class="vj">Orientaciones de la CNIL</span>
+        <h4>Dos FAQ sobre sistemas de IA en los centros escolares</h4>
+        <div class="cite">CNIL, 20 de junio de 2025</div>
+        <p>Una va dirigida al profesorado, con usos pedagógicos y precauciones, y otra a los responsables de tratamiento, con obligaciones y conformidad. Alertan de fugas de datos, del envío excesivo de datos a una IA generativa y de que los datos sobre métodos y resultados del alumnado circulen fuera del ámbito educativo sin información ni consentimiento libre. Recomiendan elegir y parametrizar la herramienta antes de usarla y asociar al delegado de protección de datos.</p>
+        <a class="lnk" href="https://cnil.fr/fr/deux-faq-utilisation-des-systemes-dia-scolaire">Nota de la CNIL</a></article>
+    </div>
+  </div>
+  </div>
+  <div class="tabpanel" role="tabpanel" id="panel-portugal" aria-labelledby="tab-portugal" hidden>
+  <div class="agebadge"><div class="age-num">13<small>años</small></div><p>Edad de consentimiento digital en Portugal, según la Ley 58/2019. Por debajo de 13, o fuera de los servicios de la sociedad de la información, rige el Código Civil.</p></div>
+  <div class="callout">Portugal cuenta con un borrador de orientaciones sobre IA en las escuelas, en consulta pública desde octubre de 2026, y con una recomendación del Consejo Nacional de Educación de mayo de 2026.</div>
+
+  <div class="norm-group">
+    <h3>En vigor y vinculante</h3>
+    <div class="norms">
+      <article class="norm bind"><span class="vj">Ley, vinculante</span>
+        <h4>Ley de ejecución del RGPD en Portugal</h4>
+        <div class="cite">Lei n.º 58/2019, de 8 de agosto, en vigor desde el 9 de agosto de 2019</div>
+        <p>Una persona menor que haya cumplido 13 años puede consentir el tratamiento de sus datos en servicios de la sociedad de la información. En el resto de casos se aplica el Código Civil, con consentimiento válido en general desde los 18, o desde los 16 en casos excepcionales.</p>
+        <a class="lnk" href="https://www.garrigues.com/en_GB/new/new-portuguese-data-protection-act">Resumen de Garrigues</a></article>
+    </div>
+  </div>
+
+  <div class="norm-group">
+    <h3>Orientaciones y recomendaciones</h3>
+    <div class="norms">
+      <article class="norm treaty"><span class="vj">Borrador en consulta pública</span>
+        <h4>Orientaciones para la utilización responsable de la IA en las escuelas</h4>
+        <div class="cite">EduQA, Gobierno de Portugal, nota del 16 de octubre de 2026, versión final prevista el 4 de enero de 2027</div>
+        <p>Cubre centros públicos y privados de educación infantil, básica y secundaria. Propone que el docente elija entre tres niveles de uso en cada actividad: «sem IA», «IA de apoio» e «IA integrada». En educación infantil, el alumnado no usa herramientas de IA de forma directa y autónoma. Incluye medidas de protección de datos personales y herramientas para alumnado, profesorado y centros. La consulta dura 30 días y los centros pueden empezar a aplicarlo mientras tanto.</p>
+        <a class="lnk" href="https://portugal.gov.pt/gc25/comunicacao/noticias/orientacoes-para-utilizacao-responsavel-da-ia-nas-escolas-em-consulta-publica">Nota del Gobierno</a></article>
+      <article class="norm"><span class="vj">Recomendación</span>
+        <h4>Integración de la inteligencia artificial en el sistema educativo portugués</h4>
+        <div class="cite">Conselho Nacional de Educação, Recomendação n.º 4/2026, 2.ª serie, n.º 98, de 21 de mayo de 2026</div>
+        <p>Aprobada en pleno el 4 de mayo de 2026. Recomienda alfabetización en IA desde el primer ciclo y en la formación inicial del profesorado, códigos de conducta escolares con reporte de incidentes, transparencia algorítmica en los contratos con proveedores y protección de la privacidad de los menores. Pide impedir que decisiones con impacto significativo sobre el alumnado las tomen solo sistemas automatizados, con validación humana y derecho de recurso. Deja a la Asamblea de la República el marco legislativo, articulado con el Reglamento de IA y el Convenio del Consejo de Europa.</p>
+        <a class="lnk" href="https://www.cnedu.pt/content/Integracao_da_IA_no_sistema_educativo_portugues_recomendacao_DRE_21_05_2026.pdf">Texto de la recomendación</a></article>
+    </div>
+  </div>
+  </div>
+</section>
+
+<section id="fuentes" class="sources">
+  <div class="sec-head"><div class="eyebrow">Para comprobar</div><h2>Fuentes consultadas</h2></div>
+
+  <h3>Textos oficiales o cercanos al texto</h3>
+  <ul>
+    <li><a href="https://artificialintelligenceact.eu/ai-act-explorer/digital-omnibus/">Digital Omnibus on AI, AI Act Explorer</a></li>
+    <li><a href="https://cdn.presencis.com/regulations/eu-ai-act/article-4/">Artículo 4 del AI Act tras el Omnibus, Presencis</a></li>
+    <li><a href="https://gdpr-text.com/read/article-8/?lang1=en">RGPD, artículo 8, consentimiento de menores</a></li>
+    <li><a href="https://edu.google.com/intl/ALL_us/our-values/privacy-security/frequently-asked-questions/">Google for Education, preguntas frecuentes de privacidad y seguridad</a></li>
+    <li><a href="https://blog.google/feed/notebooklm-is-now-available-to-younger-users/">Google, NotebookLM disponible para usuarios más jóvenes (agosto de 2025)</a></li>
+    <li><a href="https://workspaceupdates.googleblog.com/2026/08/gemini-in-google-classroom-is-expanding-to-users-of-all-ages-with-contextualized-Gemini-starter-prompts-for-students.html">Google Workspace Updates, Gemini en Classroom para todas las edades</a></li>
+    <li><a href="https://workspaceupdates.googleblog.com/2025/09/educators-create-gems-notebooks-google-classroom.html">Google Workspace Updates, Gems y cuadernos asignables en Classroom</a></li>
+    <li><a href="https://support.google.com/edu/classroom/answer/16538778?hl=en-IN&co=GENIE.Platform%3DAndroid">Ayuda de Classroom, Gemini Notebook y Gems para estudiantes</a></li>
+    <li><a href="https://developers.google.com/apps-script/guides/services/quotas?hl=en">Google, cuotas de Apps Script por tipo de cuenta</a></li>
+    <li><a href="https://glowconnect.org.uk/docs/machine-learning-and-ai-within-glow/gemini-education-and-notebooklm-for-learners-educator-information/">Glow, información para docentes sobre Gemini Education y NotebookLM</a></li>
+    <li><a href="https://privacydesign.ch/kb/ages/">Privacy Design, edad de consentimiento digital por país</a></li>
+    <li><a href="https://www.sporty.plus/blog/age-of-digital-consent-by-country">Sporty Plus, edad de consentimiento digital por país</a></li>
+    <li><a href="https://complydog.com/blog/gdpr-age-of-consent">ComplyDog, edad de consentimiento del RGPD</a></li>
+    <li><a href="https://education.ec.europa.eu/news/ethical-guidelines-on-the-use-of-artificial-intelligence-and-data-in-teaching-and-learning-for-educators">Comisión Europea, directrices éticas sobre IA y datos para docentes</a></li>
+    <li><a href="https://unesco.org.nz/knowledge-hub/unesco-ai-competency-framework-for-students-and-teachers">UNESCO, marcos de competencias en IA para alumnado y profesorado</a></li>
+  </ul>
+
+  <h3>Análisis especializados</h3>
+  <ul>
+    <li><a href="https://www.technology.org/2026/10/13/eu-ai-act-deadlines-after-the-digital-omnibus-what-applies-from-december-2026-to-august-2028/">Technology Org, plazos del AI Act tras el Omnibus</a></li>
+    <li><a href="https://cdp.cooley.com/digital-ai-omnibus-delays-key-deadlines-introduces-new-rules/">Cooley, qué aplaza el Digital AI Omnibus</a></li>
+    <li><a href="https://www.winssolutions.org/eu-ai-act-education-deadline-deferred/">WINS Solutions, plazo de la IA educativa de alto riesgo</a></li>
+    <li><a href="https://www.tecnicadellascuola.it/ai-act-quali-obblighi-per-le-scuole-dal-2-agosto-2026-i-docenti-vanno-formati">Tecnica della Scuola (en italiano), obligaciones del AI Act para centros educativos</a></li>
+  </ul>
+
+  <h3>Evidencia sobre aprendizaje</h3>
+  <ul>
+    <li><a href="https://its.utoronto.ca/?p=29461">Bastani et al., resumen del ensayo, Universidad de Toronto</a></li>
+    <li><a href="https://web.cs.toronto.edu/news-events/events/sri-seminar-series-hamsa-bastani-unpacking-the-unintended-consequences-of-ai-in-education">Bastani, seminario sobre consecuencias no previstas de la IA en educación</a></li>
+    <li><a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC12179260/">Kestin et al., 2025, Scientific Reports (PMC)</a></li>
+    <li><a href="https://hub.hku.hk/handle/10722/365321">Metaanálisis de chatbots para el aprendizaje de lenguas, HKU</a></li>
+    <li><a href="https://communities.springernature.com/posts/can-generative-ai-really-improve-language-learning-what-51-studies-tell-us">Saarela et al., 2026, metaanálisis de IA generativa en lenguas</a></li>
+    <li><a href="https://eventosepge.fgv.br/files/exploring_the_impact_of_artificial_intelligence_on_english_language_teaching.pdf">Ekizer, 2025, metaanálisis de IA en la enseñanza de inglés</a></li>
+  </ul>
+</section>
+
+<footer><strong>Marta Sanz Manzanedo.</strong> Esta página no constituye asesoramiento jurídico. Para una decisión de centro, contrasta los textos originales y consulta a la dirección o al responsable de protección de datos.</footer>
+
+</div>
+
+<script>
+(function () {
+  var chips = document.querySelectorAll('.chip');
+  var cards = document.querySelectorAll('#cards .card');
+  chips.forEach(function (chip) {
+    chip.addEventListener('click', function () {
+      var f = chip.getAttribute('data-filter');
+      chips.forEach(function (c) { c.setAttribute('aria-pressed', c === chip ? 'true' : 'false'); });
+      cards.forEach(function (card) {
+        var tags = (card.getAttribute('data-tags') || '').split(' ');
+        card.hidden = !(f === 'todos' || tags.indexOf(f) !== -1);
+      });
+    });
+  });
+})();
+</script>
+<script>
+(function () {
+  var sim = document.getElementById('sim');
+  if (!sim) return;
+  var verdict = document.getElementById('verdict');
+  var hint = document.getElementById('sim-hint');
+  function val(n) { var e = sim.querySelector('input[name="' + n + '"]:checked'); return e ? e.value : null; }
+  function render() {
+    var uso = val('uso'), datos = val('datos'), cuenta = val('cuenta'), edad = val('edad');
+    if (!(uso && datos && cuenta && edad)) { verdict.hidden = true; hint.hidden = false; return; }
+    var level = 0, why = [], todo = [];
+    function bump(l, w, t) { if (l > level) level = l; if (w) why.push(w); if (t && todo.indexOf(t) < 0) todo.push(t); }
+    var alumnado = (uso === 'b' || uso === 'c');
+    if (uso === 'd') bump(2, 'Evaluar resultados de aprendizaje y determinar el nivel educativo figuran en el alto riesgo del Anexo III, aplicable desde el 2 de diciembre de 2027. En esta página, poner la nota con IA queda en «evitar».', 'Usa la IA solo para preparar criterios o borradores de comentario que revises tú. La nota es tuya.');
+    if (uso === 'e') bump(2, 'Inferir emociones del alumnado en un centro educativo está prohibido por el artículo 5 desde el 2 de febrero de 2025.', 'Elige un recurso que no infiera estados emocionales.');
+    if (uso === 'f') bump(2, 'La detección automática de conductas prohibidas en exámenes figura en el alto riesgo del Anexo III, aplicable desde el 2 de diciembre de 2027. En esta página la marco como «evitar».', 'Plantea la prueba de modo que no dependa de vigilancia automática.');
+    if (uso === 'c') bump(1, 'La retroalimentación con IA encaja solo como ayuda formativa: sin nota y con revisión docente.', 'Revisa cada comentario antes de entregarlo y no pongas nota automática.');
+    if (uso === 'b') todo.push('Define en el prompt lo que el asistente no puede hacer, limita el tiempo y cierra con una tarea sin IA.');
+    if (uso === 'a' && datos === 'n') why.push('Preparar materiales sin datos personales no activa restricciones especiales conocidas.');
+    if (datos === 'x') bump(2, 'Los datos de salud son una categoría con protección reforzada en el RGPD, y la situación familiar o las necesidades especiales pueden revelarlos.', 'No subas estos datos a un asistente de IA.');
+    if (datos === 'i') bump(2, 'Nombres, fotos, voz, notas y expedientes identifican al alumnado. Según el semáforo de datos de esta página, no entran.', 'Quita los identificadores antes de usar la herramienta y consulta con la persona responsable de protección de datos de tu centro si no es posible.');
+    if (datos === 's') bump(1, 'Seudonimizar no es anonimizar: el texto sigue siendo dato personal si un detalle permite reconocer al alumno.', 'Relee el texto buscando anécdotas, lugares, apodos o nombres de compañeros.');
+    if (cuenta === 'p' && datos !== 'n') bump(2, 'Con datos del alumnado, una cuenta personal queda fuera de lo que esta página considera aceptable.', 'Pasa a una cuenta educativa del centro con la herramienta admitida.');
+    else if (cuenta === 'p' && alumnado) bump(1, 'Para el alumnado conviene una cuenta educativa administrada por el centro, no personal.', 'Pide a tu administrador que active el servicio en la cuenta educativa.');
+    if (cuenta === 'u' && (alumnado || datos !== 'n')) bump(1, 'No sabes qué cuenta usas, y eso cambia las condiciones de tratamiento de datos.', 'Averigua con tu administrador si la cuenta es educativa y qué servicios tiene activados.');
+    if (cuenta === 'e' && (alumnado || datos !== 'n')) why.push('Con cuenta educativa, Google declara que los chats no los revisan personas ni se usan para entrenar modelos. Es una declaración del proveedor, no una certificación.');
+    if (alumnado && edad === 'b') bump(1, 'Por debajo de la edad de consentimiento digital hace falta el consentimiento de las familias, según el RGPD y la ley nacional.', 'Recoge el consentimiento familiar o ofrece una alternativa sin cuenta.');
+    if (alumnado && edad === 'u') bump(1, 'No conoces la edad de consentimiento digital aplicable.', 'Consulta la tabla de edades por país de esta página y confirma con tu autoridad nacional.');
+    if (alumnado) todo.push('Indica al alumnado que usa IA y para qué.');
+    var titles = ['Verde: compatible, con buenas prácticas', 'Ámbar: posible con condiciones', 'Rojo: evitar tal como lo planteas'];
+    verdict.className = 'verdict l' + level;
+    document.getElementById('v-title').textContent = titles[level];
+    var w = document.getElementById('v-why'), t = document.getElementById('v-do');
+    w.innerHTML = ''; t.innerHTML = '';
+    if (!why.length) why.push('No aparece ninguna restricción en las reglas recogidas en esta página.');
+    why.forEach(function (x) { var li = document.createElement('li'); li.textContent = x; w.appendChild(li); });
+    if (!todo.length) todo.push('Mantén los datos personales fuera de la herramienta.');
+    todo.forEach(function (x) { var li = document.createElement('li'); li.textContent = x; t.appendChild(li); });
+    verdict.hidden = false; hint.hidden = true;
+  }
+  sim.addEventListener('change', render);
+  document.getElementById('sim-reset').addEventListener('click', function () {
+    sim.querySelectorAll('input[type=radio]').forEach(function (r) { r.checked = false; });
+    render();
+  });
+
+  var KEY = 'ia-segura-checklist-v1';
+  var boxes = Array.prototype.slice.call(document.querySelectorAll('#check input[type=checkbox]'));
+  var saved = {};
+  try { saved = JSON.parse(localStorage.getItem(KEY) || '{}') || {}; } catch (e) { saved = {}; }
+  boxes.forEach(function (b) { if (saved[b.getAttribute('data-k')]) b.checked = true; });
+  function update() {
+    var n = boxes.filter(function (b) { return b.checked; }).length, tot = boxes.length;
+    document.getElementById('cl-count').textContent = n + ' de ' + tot;
+    var pct = Math.round(100 * n / tot);
+    document.querySelector('#cl-bar i').style.width = pct + '%';
+    document.getElementById('cl-bar').setAttribute('aria-valuenow', pct);
+    document.getElementById('cl-done').hidden = n !== tot;
+    var o = {}; boxes.forEach(function (b) { if (b.checked) o[b.getAttribute('data-k')] = 1; });
+    try { localStorage.setItem(KEY, JSON.stringify(o)); } catch (e) {}
+  }
+  boxes.forEach(function (b) { b.addEventListener('change', update); });
+  document.getElementById('cl-reset').addEventListener('click', function () { boxes.forEach(function (b) { b.checked = false; }); update(); });
+  update();
+})();
+</script>
+<script>
+(function () {
+  var tabs = Array.prototype.slice.call(document.querySelectorAll('#paises .tab'));
+  if (!tabs.length) return;
+  function show(t, focus) {
+    tabs.forEach(function (x) {
+      var on = x === t;
+      x.setAttribute('aria-selected', on ? 'true' : 'false');
+      x.tabIndex = on ? 0 : -1;
+      document.getElementById(x.getAttribute('aria-controls')).hidden = !on;
+    });
+    if (focus) t.focus();
+  }
+  tabs.forEach(function (t, i) {
+    t.addEventListener('click', function () { show(t, false); });
+    t.addEventListener('keydown', function (e) {
+      var j = null;
+      if (e.key === 'ArrowRight') j = (i + 1) % tabs.length;
+      else if (e.key === 'ArrowLeft') j = (i + tabs.length - 1) % tabs.length;
+      else if (e.key === 'Home') j = 0;
+      else if (e.key === 'End') j = tabs.length - 1;
+      if (j !== null) { e.preventDefault(); show(tabs[j], true); }
+    });
+  });
+})();
+</script>
