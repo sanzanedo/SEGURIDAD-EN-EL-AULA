@@ -317,7 +317,7 @@ footer { font-size: 0.88rem; color: var(--muted); max-width: 68ch; border-top: 1
   <div class="summary">
     <p>El marco común europeo descansa en dos pilares: el Reglamento de IA, que prohíbe ciertas prácticas, clasifica los usos educativos de riesgo y exige transparencia, y el RGPD, que regula los datos personales del alumnado. Sobre ellos, cada Estado miembro y cada centro añaden sus propias reglas, de modo que la segunda capa cambia según el país. En octubre de 2026 el cambio más importante es que las obligaciones de alto riesgo para sistemas de IA educativos se aplazaron al 2 de diciembre de 2027. Siguen aplicándose desde febrero de 2025 la prohibición de inferir emociones en centros educativos y el deber de alfabetización en IA, que desde julio de 2026 se redacta como obligación de apoyar esa formación y no de garantizarla.</p>
     <p>Del marco europeo se desprenden tres líneas rojas para el aula: no inferir emociones del alumnado, no delegar en la IA la nota ni decisiones sobre su recorrido, y tratar los datos personales con la mínima exposición posible. Lo demás depende de la política de cada centro y de la normativa nacional, así que conviene comprobar ambas antes de aplicar cualquier idea de esta página.</p>
-    <p>Sobre los usos didácticos, la evidencia disponible apunta a que el diseño de la herramienta pesa más que la herramienta. Un asistente sin límites mejoró el rendimiento durante la práctica y empeoró el examen posterior sin IA. Uno configurado para guiar y no responder neutralizó ese daño.</p>
+    <p>Sobre los usos didácticos, los estudios en enseñanza de lenguas encuentran efectos positivos de los asistentes de IA, mayores en destrezas productivas como la escritura y la expresión oral. Un estudio con 90 estudiantes de inglés halló más avances en pensamiento crítico y argumentación con un agente de diálogo socrático que con un chatbot genérico. Los efectos varían mucho entre estudios.</p>
   </div>
 </section>
 
@@ -577,10 +577,10 @@ footer { font-size: 0.88rem; color: var(--muted); max-width: 68ch; border-top: 1
   <div class="cards" id="cards">
 
     <article class="card" data-tags="escritura critico">
-      <div class="badges"><span class="ev exp">Evidencia experimental</span><span class="skill">Escritura</span><span class="skill">Pensamiento crítico</span></div>
+      <div class="badges"><span class="ev exp">Estudio cuasiexperimental</span><span class="skill">Escritura</span><span class="skill">Pensamiento crítico</span></div>
       <h3>Tutor socrático con tarea guiada</h3>
-      <p>Un asistente configurado para no dar la respuesta y devolver preguntas. En un ensayo con cerca de mil estudiantes de secundaria, el chat sin salvaguardas dejó al grupo un 17% peor que el de control en el examen sin IA. La versión con salvaguardas neutralizó ese daño. En física universitaria, un tutor diseñado con principios de aprendizaje activo superó a una clase activa.</p>
-      <p class="how"><b>Condición.</b> Ningún estudio es de lenguas. Define en el prompt lo que el asistente no puede hacer, limita el tiempo y cierra con una tarea sin IA para comprobar lo aprendido.</p>
+      <p>Un asistente configurado para no dar la respuesta y devolver preguntas. En un estudio de 2026 con 90 estudiantes de inglés como lengua extranjera, un agente de diálogo socrático logró mayores mejoras en pensamiento crítico, creencias epistémicas y argumentación que un chatbot genérico y que un grupo sin IA.</p>
+      <p class="how"><b>Condición.</b> El estudio es cuasiexperimental, con participantes de institutos de idiomas. Define en el prompt lo que el asistente no puede hacer, limita el tiempo y cierra con una tarea sin IA para comprobar lo aprendido.</p>
     </article>
 
     <article class="card" data-tags="oral escritura">
@@ -598,10 +598,10 @@ footer { font-size: 0.88rem; color: var(--muted); max-width: 68ch; border-top: 1
     </article>
 
     <article class="card" data-tags="critico lectura">
-      <div class="badges"><span class="ev mta">Respaldo parcial</span><span class="skill">Pensamiento crítico</span><span class="skill">Lectura</span></div>
+      <div class="badges"><span class="ev prac">Práctica sin evidencia</span><span class="skill">Pensamiento crítico</span><span class="skill">Lectura</span></div>
       <h3>Contrastar y corregir un texto generado por IA</h3>
-      <p>El alumnado detecta errores, imprecisiones culturales o sesgos en una respuesta y la reescribe con fuentes. Los autores del ensayo de matemáticas reportan en un seminario que las intervenciones que entrenan a interactuar críticamente con la IA pueden ser beneficiosas.</p>
-      <p class="how"><b>Condición.</b> El respaldo viene de un resumen de seminario, no del artículo completo. Conviene usar textos con errores verificables.</p>
+      <p>El alumnado detecta errores, imprecisiones culturales o sesgos en una respuesta y la reescribe con fuentes.</p>
+      <p class="how"><b>Condición.</b> Conviene usar textos con errores verificables.</p>
     </article>
 
     <article class="card" data-tags="oral escritura lectura">
@@ -642,7 +642,7 @@ footer { font-size: 0.88rem; color: var(--muted); max-width: 68ch; border-top: 1
     <article class="card" data-tags="escritura lectura critico">
       <div class="badges"><span class="ev prac">Práctica sin evidencia</span><span class="skill">Escritura</span><span class="skill">Lectura</span><span class="skill">Pensamiento crítico</span></div>
       <h3>NotebookLM como tutor socrático sobre fuentes del docente</h3>
-      <p>El docente sube un corpus acotado, por ejemplo un capítulo, un relato o la guía de un examen, y el alumnado conversa solo con ese material. Una guía de un servicio educativo británico indica que la versión para estudiantes trabaja únicamente con el contenido que se sube. Se pide al asistente que formule preguntas en lugar de dar respuestas, la misma lógica de salvaguardas que mejoró los resultados en los ensayos de tutores.</p>
+      <p>El docente sube un corpus acotado, por ejemplo un capítulo, un relato o la guía de un examen, y el alumnado conversa solo con ese material. Una guía de un servicio educativo británico indica que la versión para estudiantes trabaja únicamente con el contenido que se sube. Se pide al asistente que formule preguntas en lugar de dar respuestas.</p>
       <p class="how"><b>Condición.</b> Usa una cuenta educativa del centro. En Classroom puedes adjuntar el cuaderno a una tarea, siempre que el administrador haya activado NotebookLM para tu grupo y el de tu alumnado. Pide al alumnado que cite el pasaje en el que se apoya cada respuesta.</p>
     </article>
 
@@ -678,17 +678,19 @@ footer { font-size: 0.88rem; color: var(--muted); max-width: 68ch; border-top: 1
 </section>
 
 <section id="evidencia">
-  <div class="sec-head"><div class="eyebrow">Lo que sí hay</div><h2>Evidencia disponible y sus límites</h2></div>
-  <p>La evidencia más sólida sobre tutores con IA sale de matemáticas y física, no de lenguas. En lenguas abundan los metaanálisis, con efectos muy dispares entre sí.</p>
+  <div class="sec-head"><div class="eyebrow">Lo que sí hay</div><h2>Evidencia en enseñanza de lenguas</h2></div>
+  <p>Estudios y revisiones sobre IA en el aprendizaje de lenguas. Los efectos varían mucho entre trabajos, y la mayoría se centra en inglés como lengua extranjera.</p>
   <div class="tablewrap">
     <table>
       <thead><tr><th>Estudio</th><th>Muestra</th><th>Resultado</th><th>Límite</th></tr></thead>
       <tbody>
-        <tr><td>Bastani et al., 2025, PNAS</td><td>Cerca de 1.000 estudiantes de secundaria, matemáticas, Turquía</td><td>Con chat sin salvaguardas, mejor rendimiento en la práctica y un 17% peor en el examen sin IA. Con tutor con salvaguardas, daño mitigado.</td><td>Matemáticas, un solo centro.</td></tr>
-        <tr><td>Kestin et al., 2025, Scientific Reports</td><td>194 universitarios, física, Harvard</td><td>Más aprendizaje que una clase de aprendizaje activo, en menos tiempo y con más implicación.</td><td>Muestra selecta, dos temas, corto plazo.</td></tr>
         <tr><td>Metaanálisis de chatbots, HKU</td><td>28 estudios, 70 tamaños de efecto</td><td>Efecto global positivo, g = 0,484.</td><td>Revisión sobre chatbots en el aprendizaje de lenguas.</td></tr>
         <tr><td>Saarela et al., 2026</td><td>51 estudios, 175 tamaños de efecto</td><td>Mejora en rendimiento y variables afectivas, mayor en escritura y expresión oral.</td><td>Piden más estudios longitudinales y mayor rigor.</td></tr>
         <tr><td>Ekizer, 2025, Acta Psychologica</td><td>23 estudios sobre inglés como lengua extranjera</td><td>Efecto global grande, g = 1,10, con intervalo de 0,75 a 1,44.</td><td>Intervalo de confianza amplio.</td></tr>
+        <tr><td>Burhan, 2026, JRTI</td><td>Revisión sistemática de 20 estudios sobre retroalimentación de IA en escritura en segunda lengua</td><td>La retroalimentación apoya de forma más consistente la corrección local, el léxico, la revisión del texto y la implicación. Los efectos sobre complejidad sintáctica, composición de orden superior y retención a largo plazo son mixtos o condicionales.</td><td>No hay metaanálisis ni tamaños de efecto agrupados.</td></tr>
+        <tr><td>Namaziandost y Teng, 2026, International Journal of Applied Linguistics</td><td>90 estudiantes de inglés como lengua extranjera, nivel intermedio, tres grupos</td><td>El agente de diálogo socrático logró mayores mejoras en pensamiento crítico, creencias epistémicas y argumentación que el chatbot genérico y que el grupo sin IA.</td><td>Cuasiexperimental, solo varones, institutos de idiomas de Irán.</td></tr>
+        <tr><td>Asadi, Ebadi y Mohammadi, 2025, Thinking Skills and Creativity</td><td>68 estudiantes iraníes de inglés, nivel intermedio, retroalimentación de ChatGPT junto con la del docente frente a solo la del docente</td><td>El grupo con ChatGPT y docente mejoró más en todos los criterios: tarea, coherencia, cohesión, vocabulario y gramática.</td><td>Cuasiexperimental y de un solo contexto. El profesorado señaló riesgo de plagio y de dependencia de la IA.</td></tr>
+        <tr><td>Pipia y Gurgenishvili, 2025, European Scientific Journal</td><td>33 estudiantes de inglés de nivel B2 en universidades de Georgia, seis semanas</td><td>El grupo que usó ChatGPT para escribir mejoró significativamente más que el de enseñanza tradicional.</td><td>Muestra pequeña. Las autoras señalan preocupaciones sobre uso ético y dependencia de la IA.</td></tr>
       </tbody>
     </table>
   </div>
@@ -956,11 +958,12 @@ footer { font-size: 0.88rem; color: var(--muted); max-width: 68ch; border-top: 1
 
   <h3>Evidencia sobre aprendizaje</h3>
   <ul>
-    <li><a href="https://its.utoronto.ca/?p=29461">Bastani et al., resumen del ensayo, Universidad de Toronto</a></li>
-    <li><a href="https://web.cs.toronto.edu/news-events/events/sri-seminar-series-hamsa-bastani-unpacking-the-unintended-consequences-of-ai-in-education">Bastani, seminario sobre consecuencias no previstas de la IA en educación</a></li>
-    <li><a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC12179260/">Kestin et al., 2025, Scientific Reports (PMC)</a></li>
     <li><a href="https://hub.hku.hk/handle/10722/365321">Metaanálisis de chatbots para el aprendizaje de lenguas, HKU</a></li>
     <li><a href="https://communities.springernature.com/posts/can-generative-ai-really-improve-language-learning-what-51-studies-tell-us">Saarela et al., 2026, metaanálisis de IA generativa en lenguas</a></li>
+    <li><a href="https://www.researchgate.net/publication/414118837_Effects_of_AI-generated_feedback_on_l2_writing_a_PRISMA_2020_systematic_review_of_performance_revision_and_engagement_outcomes">Burhan, 2026, retroalimentación de IA en escritura en segunda lengua</a></li>
+    <li><a href="https://www.sciencedirect.com/science/article/abs/pii/S187118712500015X">Asadi, Ebadi y Mohammadi, 2025, ChatGPT y retroalimentación docente</a></li>
+    <li><a href="https://eujournal.org/index.php/esj/article/view/19269">Pipia y Gurgenishvili, 2025, ChatGPT y escritura en EFL</a></li>
+    <li><a href="https://research.mpu.edu.mo/en/publications/ai-supported-socratic-dialogue-agents-vs-generic-ai-chatbots-for-/">Namaziandost y Teng, 2026, agentes socráticos frente a chatbots genéricos en EFL</a></li>
     <li><a href="https://eventosepge.fgv.br/files/exploring_the_impact_of_artificial_intelligence_on_english_language_teaching.pdf">Ekizer, 2025, metaanálisis de IA en la enseñanza de inglés</a></li>
   </ul>
 </section>
